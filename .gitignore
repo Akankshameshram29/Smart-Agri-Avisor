@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+instance/
+
+# Environment Files (Sensitive)
+.env
+.env.local
+backend/.env
+
+# Database
+*.db
+*.sqlite3
+
+# Build Artifacts
+dist/
+build/
+*.log
+
+# OS Generated
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Temporary Files
+*.tmp
+*.temp
