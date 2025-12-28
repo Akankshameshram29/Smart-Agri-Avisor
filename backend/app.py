@@ -66,6 +66,12 @@ class CropDetailsRequest(BaseModel):
     phone: Optional[str] = None
     analysisId: Optional[str] = None
 
+class ChatRequest(BaseModel):
+    phone: str
+    question: str
+    history: Optional[List[Dict[str, str]]] = None
+    context: Optional[Dict[str, Any]] = None
+
 
 # ==================== AUTH ROUTES ====================
 
@@ -208,6 +214,22 @@ def search_marketplace(query: str = Query(""), category: str = Query("All")):
     except Exception as e:
         print(f"Marketplace error: {e}")
         return []
+
+
+# ==================== CHAT ROUTES ====================
+
+@app.post("/api/chat/ask")
+def ask_question(request: ChatRequest):
+    """Ask an agricultural question to the AI."""
+    if not request.question:
+        raise HTTPException(status_code=400, detail="Question required")
+    
+    try:
+        answer = gemini_service.ask_question(request.question, request.history, request.context)
+        return {"answer": answer}
+    except Exception as e:
+        print(f"Chat error: {e}")
+        raise HTTPException(status_code=500, detail="Advisor is currently unavailable.")
 
 
 # ==================== HEALTH CHECK ====================

@@ -59,5 +59,27 @@ export const geminiService = {
     } catch {
       return [];
     }
+  },
+
+  async askQuestion(phone: string, question: string, context?: any, history?: { role: string, content: string }[]): Promise<string> {
+    const response = await fetch(`${API_BASE_URL}/chat/ask`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phone,
+        question,
+        context,
+        history
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to get answer');
+    }
+
+    const data = await response.json();
+    return data.answer;
   }
 };

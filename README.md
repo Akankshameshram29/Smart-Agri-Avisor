@@ -1,41 +1,41 @@
 # Smart Agri Advisor: AI-Powered Mandi Expert 🌾
 
-[![V1.0.0 Production Release](https://img.shields.io/badge/Release-V1.0.0-emerald?style=for-the-badge)](https://github.com/Aadya-Madankar/Smart-Agri-Avisor)
-[![AI Engine](https://img.shields.io/badge/AI_Engine-Google_Gemini-blue?style=for-the-badge)](https://ai.google.dev/)
-[![Location Strategy](https://img.shields.io/badge/Strategy-Location--Aware-orange?style=for-the-badge)](#)
+[![V1.1.0 Production Release](https://img.shields.io/badge/Release-V1.1.0-emerald?style=for-the-badge)](https://github.com/Aadya-Madankar/Smart-Agri-Avisor)
+[![AI Engine](https://img.shields.io/badge/AI_Engine-Google_Gemini_2.5-blue?style=for-the-badge)](https://ai.google.dev/)
+[![Resilience](https://img.shields.io/badge/API_Rotation-Enabled-green?style=for-the-badge)](#)
 
-> **A high-precision AI decision-support system for Indian farmers.** Combining real-time Mandi search grounding with historical price trends and predictive analysis.
+> **A high-precision AI decision-support system for Indian farmers.** Combining real-time Mandi search grounding with robust API failovers and an ultra-premium conversational advisor.
 
 ---
 
 ## 🚀 Vision
-Smart Agri Advisor is a **Verification Pipeline** designed to provide farmers with reliable, data-backed agricultural insights. It eliminates AI "hallucinations" by grounding its reasoning in real-time web data (Mandi rates) and personalizing recommendations based on the user's localized search history.
+Smart Agri Advisor is a **Verification Pipeline** designed to provide farmers with reliable, data-backed agricultural insights. It eliminates AI "hallucinations" by grounding its reasoning in real-time web data and personalizing recommendations based on the user's localized search history.
 
 ---
 
 ## 🛠️ Technological Stack
 
 ### **Frontend Layer**
-- **React 18 + TypeScript**: For a type-safe, responsive UI.
-- **Tailwind CSS**: Modern design system with efficient, utility-first styling.
-- **Leaflet Engine**: Interactive map interaction for precise location selection.
-- **Recharts**: Data visualization for price history and future trends.
+- **React 18 + TypeScript**: Type-safe, high-performance UI components.
+- **Glassmorphic UI Engine**: Custom-built CSS for a premium, lightweight aesthetic.
+- **Leaflet Engine**: Interactive map integration for village-level geo-tagging.
+- **Improved Charting**: High-fidelity Recharts with dual-unit price tracking (₹/Quintal & ₹/kg).
 
 ### **Backend & Intelligence**
-- **Python FastAPI**: High-performance asynchronous API server.
-- **Google Gemini 3.0**: Advanced reasoning engine for geological and agricultural analysis.
-- **Hybrid Search Grounding**: Integration with Google Search (via Serper) to fetch live Mandi prices.
-- **SQLAlchemy + SQLite**: Robust data persistence for user history and personalization.
+- **FastAPI Core**: Asynchronous API handling for rapid response delivery.
+- **Adaptive Key Rotation**: Automated failover between multiple Gemini 2.5 API keys to ensure 99.9% uptime.
+- **Neural History Engine**: Full conversation memory allowing complex follow-up questions.
+- **Multi-Linguistic Flow**: Native support for Hindi, English, and **Hinglish** with automatic style detection.
 
 ---
 
 ## ⚙️ How It Works (Actual Mechanism)
 
-1.  **Map-Based Geo-Tagging**: The user selects their farm's location on an interactive map. The system captures the precise geocoordinates (Latitude/Longitude).
-2.  **Geo-Resolution**: The AI resolves these coordinates into a specific **Agricultural District and State** in India.
-3.  **Live Mandi Grounding**: The system performs a live search for the latest crop prices in the identified district's Mandis.
-4.  **Adaptive Personalization**: After 3 searches in a specific region, the system begins to inject historical "regional patterns" from the user's own database into the AI context, providing more personalized advice.
-5.  **9-Point Temporal Insight**: Generates a timeline showing 4 months of history, today's verified rate, and a 4-month market projection.
+1.  **Map-Based Geo-Tagging**: Precise geocoordinates capture for local climate context.
+2.  **API Resilience Layer**: In-built logic that rotates API keys if rate limits (429) are hit.
+3.  **Real-Time Grounding**: Live search for verified rates via Serper, filtered for high authority.
+4.  **Empathy-Driven Advisor**: AI system prompt tuned to address farmer problems with respect and practical solutions.
+5.  **Standardized Mandi Logic**: Clear distinction between Mandi trading units (Quintal) and consumer/farmer planning units (kg).
 
 ---
 
@@ -43,10 +43,10 @@ Smart Agri Advisor is a **Verification Pipeline** designed to provide farmers wi
 
 | Feature | Static Apps/Databases | Smart Agri Advisor |
 | :--- | :--- | :--- |
-| **Price Data** | Often outdated (months old) | **Live Verified Rates** (Refreshed via Search) |
-| **Personalization** | Generic for the whole state | **Adaptive** (Learns from your history) |
-| **Location** | Manual district selection | **1-Tap Map Pinning** |
-| **Forecasting** | Simple averages | **Predictive Analysis** with Risk Bounds |
+| **Price Data** | Often outdated (months old) | **Live Verified Rates** (Auto-Grounding) |
+| **Resilience** | Fails under load | **Key Rotation Engine** (Zero Downtime) |
+| **Conversational Flow** | Command-based/Rigid | **Hinglish/Natural** (Matches User Style) |
+| **Context** | Generic | **History-Aware** (Remembers your farm) |
 
 ---
 
@@ -56,10 +56,11 @@ Smart Agri Advisor is a **Verification Pipeline** designed to provide farmers wi
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # Windows: .\venv\Scripts\activate
+source venv/bin/activate
 pip install -r requirements.txt
 
-# Create .env with Gemini API Key
+# Configure .env with multiple keys for rotation:
+# GEMINI_KEYS=key1,key2,key3
 python app.py
 ```
 
@@ -84,4 +85,4 @@ smart-agri-advisor/
 
 ---
 
-*Smart Agri Advisor | © 2025*
+*Smart Agri Advisor | Built for the Future of Indian Agriculture | © 2025*

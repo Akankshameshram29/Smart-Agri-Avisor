@@ -72,8 +72,8 @@ const Resources: React.FC = () => {
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={`px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border ${activeCategory === cat
-                      ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg'
-                      : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'
+                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg'
+                    : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'
                     }`}
                 >
                   {cat}
@@ -93,18 +93,9 @@ const Resources: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 gap-8">
               {articles.map(article => (
-                <div key={article.id} className="bg-white rounded-[40px] p-8 border border-slate-100 flex flex-col md:flex-row gap-8 hover:shadow-2xl transition-all group relative overflow-hidden">
-                  <div className="w-full md:w-56 h-56 rounded-[32px] overflow-hidden shrink-0 bg-emerald-50 flex items-center justify-center border border-emerald-50 shadow-inner group-hover:scale-[1.02] transition-transform duration-500">
-                    {article.image ? (
-                      <img src={article.image} alt={article.title} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="text-emerald-200 flex flex-col items-center gap-2">
-                        <i className="fas fa-newspaper text-6xl"></i>
-                        <span className="text-[10px] font-black uppercase">Guide</span>
-                      </div>
-                    )}
-                  </div>
+                <div key={article.id} className="bg-white rounded-[40px] p-10 border border-slate-100 flex flex-col gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
                   <div className="flex flex-col justify-center space-y-4 flex-1">
+
                     <div className="flex items-center gap-3">
                       <span className="px-3 py-1 rounded-full text-[9px] font-black border bg-emerald-50 text-emerald-700 border-emerald-100 uppercase tracking-[0.2em]">
                         {article.category}

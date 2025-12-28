@@ -56,7 +56,7 @@ export interface User {
   joinedAt: string;
 }
 
-export type AppTab = 'dashboard' | 'resources' | 'history' | 'history_view';
+export type AppTab = 'dashboard' | 'resources' | 'history' | 'history_view' | 'chat';
 
 export interface ResourceArticle {
   id: string;

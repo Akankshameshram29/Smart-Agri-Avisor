@@ -13,6 +13,17 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
   const historyData = detail.pricing.price_history;
   const analysis = detail.expert_analysis;
 
+  // Helper to parse **bold** text
+  const parseBoldText = (text: string) => {
+    const parts = text.split(/(\*\*.*?\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="text-emerald-950 font-black">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  };
+
   // Custom dot to highlight "Today" on the graph
   const CustomDot = (props: any) => {
     const { cx, cy, payload } = props;
@@ -95,7 +106,7 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
                     <Tooltip
                       contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
                       formatter={(value: number, name: string) => [
-                        `₹${value.toLocaleString()}`,
+                        `₹${(value / 100).toLocaleString()}/kg`,
                         name === 'bearish_price' ? 'Worst Case (Risk)' : 'Expected Rate'
                       ]}
                     />
@@ -121,13 +132,13 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
             <div className="space-y-4">
               <div className="bg-emerald-600 text-white p-6 rounded-[32px] shadow-lg">
                 <div className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Target Rate</div>
-                <div className="text-3xl font-black mb-1">₹{detail.pricing.future_price_per_quintal.toLocaleString()}</div>
+                <div className="text-3xl font-black mb-1">₹{(detail.pricing.future_price_per_quintal / 100).toLocaleString()}/kg</div>
                 <div className="text-xs font-bold opacity-80">Grounding Bullish Forecast</div>
               </div>
               <div className="p-6 rounded-[32px] border border-slate-100 bg-white shadow-sm">
                 <div className="text-[10px] font-black text-rose-400 uppercase tracking-widest mb-1">Risk Lower-Bound</div>
                 <div className="text-2xl font-black text-rose-500 mb-1">
-                  ₹{(historyData.filter(d => d.type === 'prediction').pop()?.bearish_price || Math.round(detail.pricing.current_price_per_quintal * 0.85)).toLocaleString()}
+                  ₹{((historyData.filter(d => d.type === 'prediction').pop()?.bearish_price || Math.round(detail.pricing.current_price_per_quintal * 0.85)) / 100).toLocaleString()}/kg
                 </div>
                 <div className="flex items-center gap-1 text-slate-400 font-bold text-[9px] uppercase tracking-tighter">
                   <i className="fas fa-triangle-exclamation"></i> Lowest Estimated Rate
@@ -148,8 +159,51 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
               </div>
             </div>
 
-            <div className="prose prose-slate max-w-none text-sm text-slate-600 leading-relaxed bg-emerald-50/30 p-8 rounded-3xl border border-emerald-100">
-              {analysis.detailed_strategy.split('\n').map((para, i) => para.trim() && <p key={i}>{para}</p>)}
+            <div className="max-w-none text-sm text-slate-600 leading-relaxed bg-emerald-50/10 p-10 rounded-[48px] border border-emerald-100/50 shadow-inner">
+              <div className="space-y-8">
+                {analysis.detailed_strategy.split('\n').map((line, i) => {
+                  const trimmedLine = line.trim();
+                  if (!trimmedLine) return <div key={i} className="h-4" />;
+
+                  // Premium Section Headers
+                  if (trimmedLine.startsWith('###')) {
+                    return (
+                      <div key={i} className="pt-6 group">
+                        <h4 className="text-emerald-950 font-black text-xl mb-4 flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-sm shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                            <i className="fas fa-seedling"></i>
+                          </div>
+                          {trimmedLine.replace(/^###\s*\d*\.?\s*/, '').trim()}
+                        </h4>
+                        <div className="h-1 w-20 bg-emerald-500/20 rounded-full" />
+                      </div>
+                    );
+                  }
+
+                  // Premium Bullet Cards
+                  if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
+                    const content = trimmedLine.replace(/^[•\-\d+\.]\s*/, '').trim();
+                    return (
+                      <div key={i} className="flex gap-6 pl-4 group items-start">
+                        <div className="w-8 h-8 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+                          <i className="fas fa-check text-xs"></i>
+                        </div>
+                        <div className="bg-white/80 backdrop-blur-md p-6 rounded-[32px] border border-emerald-50 shadow-sm flex-1 group-hover:shadow-xl group-hover:border-emerald-200 transition-all duration-300">
+                          <p className="text-md font-bold text-slate-800 leading-relaxed">
+                            {parseBoldText(content)}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div key={i} className="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100/50 italic text-slate-600 font-medium">
+                      {parseBoldText(trimmedLine)}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">

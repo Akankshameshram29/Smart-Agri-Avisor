@@ -34,7 +34,7 @@ class AgentService:
             
             snippets = []
             for result in search_data.get('organic', [])[:5]:
-                snippets.append(f"{result.get('title')}: {result.get('snippet')}")
+                snippets.append(f"Title: {result.get('title')}\nSnippet: {result.get('snippet')}\nURL: {result.get('link')}\n---")
             return "\n".join(snippets)
         except Exception as e:
             print(f"Serper search failed: {e}")
@@ -63,7 +63,7 @@ class AgentService:
         )
         
         geo_response = client.models.generate_content(
-            model='gemini-3-flash-preview',
+            model='gemini-2.5-flash',
             contents=f"RESOLVE COORDINATES: Lat {lat}, Lng {lng}. Return the Agricultural District and State in India. STRICT JSON.",
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -84,7 +84,7 @@ class AgentService:
         web_context = ""
         search_tool_enabled = False
         
-        # If Serper key exists, use it as primary grounding (faster for snippets)
+        # Always use Serper search for grounding to avoid conflict with JSON schema
         if not skip_search:
             orchestration_log.append(f"Synchronizing with Mandi Live Feed...")
             search_query = f"{district} {state} Mandi crop prices today {today_str}"
@@ -92,8 +92,7 @@ class AgentService:
             if web_context:
                 orchestration_log.append(f"Live data retrieved via Neural Node.")
             else:
-                search_tool_enabled = True # Use native Google Search tool if Serper fails/missing
-                orchestration_log.append(f"Activating Deep Grounding Search...")
+                orchestration_log.append(f"Searching Mandi archives (Static Mode)...")
 
         # Step 3: Main Analysis
         contents = f"""Perform a High-Fidelity Mandi Market Scan.
@@ -101,7 +100,7 @@ class AgentService:
         Current Date: {today_str}. 
         Projecting for upcoming crop cycles in {today.year if today.month < 9 else today.year + 1}.
         
-        {f"LIVE GROUNDING DATA: {web_context}" if web_context else "GROUNDING: Use your built-in Google Search tool to find exact Mandi rates for today."}
+        {f"LIVE MANDI GROUNDING DATA (STRICTLY USE THIS FOR RATES): {web_context}" if web_context else "GROUNDING: Use your built-in knowledge of Indian Mandi seasonal trends."}
         
         DYNAMIC CROP RECOMMENDATIONS:
         - Provide at least 5-7 different crop options that are grown in that area.
@@ -153,19 +152,13 @@ class AgentService:
             required=["soil", "crops"]
         )
         
-        # Adaptive Config: Enable Google Search Tool if needed
-        tools = []
-        if search_tool_enabled:
-            tools.append(types.Tool(google_search=types.GoogleSearch()))
-
         config = types.GenerateContentConfig(
-            tools=tools if tools else None,
             response_mime_type="application/json",
             response_schema=analysis_schema
         )
         
         response = client.models.generate_content(
-            model='gemini-3-flash-preview',
+            model='gemini-2.5-flash',
             contents=contents,
             config=config
         )

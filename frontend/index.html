@@ -150,6 +150,30 @@
             letter-spacing: 0.1em !important;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2) !important;
         }
+
+        /* Premium Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+            border: 3px solid #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: #10b981 #f1f5f9;
+        }
     </style>
     <script type="importmap">
 {

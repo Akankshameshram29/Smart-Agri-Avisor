@@ -34,13 +34,13 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
 
         {/* Navigation Section */}
         <nav className="flex items-center gap-1 md:gap-4">
-          {['dashboard', 'history', 'resources'].map((tab) => (
+          {['dashboard', 'chat', 'history', 'resources'].map((tab) => (
             <div key={tab} className="relative">
               <span
                 onClick={() => onTabChange(tab as AppTab)}
                 className={getTabClass(tab as AppTab)}
               >
-                {tab === 'dashboard' ? 'Advisor' : tab === 'history' ? 'Reports' : 'Know'}
+                {tab === 'dashboard' ? 'Advisor' : tab === 'history' ? 'Reports' : tab === 'chat' ? 'Chat' : 'Know'}
               </span>
               {(activeTab === tab || (activeTab === 'history_view' && tab === 'dashboard')) && (
                 <div className="absolute bottom-1 left-4 right-4 h-0.5 bg-emerald-600 rounded-full shadow-[0_0_8px_#10b981]"></div>

@@ -9,7 +9,8 @@ import ProfilePanel from './components/DatabaseManager';
 import LoginPage from './components/LoginPage';
 import { agentService } from './services/agentService';
 import { dbService } from './services/dbService';
-import { RecommendationResponse, CropDetail, AppTab, FarmerRecord, User } from './types';
+import AgriChat from './components/AgriChat';
+import { RecommendationResponse, CropDetail, AppTab, FarmerRecord, User, SoilData, LocationInfo } from './types';
 import { geminiService } from './services/geminiService';
 import { DashboardSkeleton, ResultsSkeleton } from './components/SkeletonLoaders';
 import MapInstructions from './components/MapInstructions';
@@ -523,6 +524,12 @@ const App: React.FC = () => {
           </div>
         )}
 
+        {activeTab === 'chat' && (
+          <AgriChat
+            user={user}
+            currentContext={analysis ? { location: analysis.location, soil: analysis.soil } : undefined}
+          />
+        )}
         {activeTab === 'resources' && <Resources />}
       </main>
 
