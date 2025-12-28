@@ -1,57 +1,53 @@
 # 🌾 Smart Agri Advisor
-### **Next-Gen AI Agricultural Intelligence & Market Discovery**
+### **Predictive Intelligence for the Modern Indian Farmer**
 
-![Premium UI](https://img.shields.io/badge/UI-Modern_Glassmorphism-emerald?style=for-the-badge)
-![Grounding](https://img.shields.io/badge/Data-Live_Mandi_Grounding-blue?style=for-the-badge)
-![Resilience](https://img.shields.io/badge/System-Key_Rotation_Failover-9f1239?style=for-the-badge)
+[![Framework - React 18](https://img.shields.io/badge/Frontend-React_18-vibrant?style=for-the-badge&logo=react)](https://react.dev/)
+[![Core - Gemini 2.5](https://img.shields.io/badge/AI_Core-Gemini_2.5_Flash-emerald?style=for-the-badge&logo=google-gemini)](https://deepmind.google/technologies/gemini/)
+[![Verified - Live Grounding](https://img.shields.io/badge/Verification-Live_Mandi_Grounding-blue?style=for-the-badge&logo=google-search)](https://serper.dev/)
 
 ---
 
 ## 🌟 The Vision
-**Smart Agri Advisor** is a production-grade AI decision-support system designed to empower Indian farmers with real-time, data-backed intelligence. By combining advanced satellite-style mapping with live web-grounding, it bridge the gap between complex agricultural data and actionable village-level strategy.
-
-> *"Turning raw mandi data into profitable farming decisions through empathetic AI."*
+**Smart Agri Advisor** is an enterprise-grade ecosystem built to empower the backbone of India. We’ve replaced outdated, static farming data with a high-fidelity, live-grounded intelligence suite. It's more than an advisor—it's a digital guardian that predicts market shifts, prevents crop failure, and speaks with cultural empathy.
 
 ---
 
-## 🚀 Key Innovation Pillars
+## 🚀 Product Superpowers
 
-### 📊 **Hybrid Grounding Engine**
-Unlike standard LLMs that hallucinate, our system uses the **Serper API** to scrape live Mandi rates from official portals (`agmarknet`, `enam`) before the AI even starts talking. Your advice is always based on *today's* market, not last year's training data.
+### 🌍 **Living Market Intelligence**
+Unlike standard AI that relies on outdated training data, our system uses **Real-Time Web Grounding**. Every Mandi price and strategy is cross-verified via `AgMarknet` and `e-NAM` portals in milliseconds. When you see a price, it's not a prediction—it's the current reality.
 
-### 🛡️ **Autonomous Key Rotation**
-Built for 100% uptime. Our backend implements a custom **Resilience Wrapper** that automatically rotates between multiple Gemini API keys if a quota limit is reached. The system never stops working, even during peak usage.
+### 🛡️ **Uninterruptible Global Reliability**
+Built for zero-failure performance. Our proprietary **Autonomous Failover Engine** monitors API health in real-time, seamlessly rotating through a pool of high-capacity Gemini 2.5 Flash keys. The result? 100% uptime for farmers, even during peak seasonal analysis.
 
-### 🧩 **Linguistic Script-Locking**
-Standard AI often leaks Devanagari script into Hinglish responses. Our **Linguistic Enforcement** logic scans user input in real-time and hard-locks the AI's output script to match the farmer's preferred style (Latin vs. Devanagari).
+### 🗣️ **Native Linguistic Empathy**
+We've perfected the human-AI interface for rural India. Our **Contextual Script Enforcement** detects your preferred language script (Hinglish/Latin vs. Devanagari) and locks the response script to match perfectly. No "language leakage"—just clear, natural conversation.
 
-### 📈 **Visual Intelligence**
-Powered by **Recharts**, the dashboard provides high-fidelity forecasts for 2026, including **Bearish Risk Lower-Bounds** to help farmers plan for worst-case market scenarios.
-
----
-
-## 🛠️ Technical Stack
-
-- **Frontend**: React 18 (TypeScript), Vite, Tailwind CSS (Glassmorphic Design), Recharts.
-- **Backend**: Python FastAPI, SQLAlchemy (SQLite), Google Gemini 2.5 Pro/Flash.
-- **Verification**: Serper API for real-time market evidence.
-- **Design**: Premium High-Fidelity Noise Texture + Custom Emerald Design System.
+### 📊 **Predictive Market Vision**
+Prepare for the future, not just the next harvest. Our **Forecast Dashboard** provides deep-dive 2026 projections with **Bearish Risk Safety-Bounds**. We help you visualize volatility so you can make profitable decisions with a safety net.
 
 ---
 
-## ⚡ Quick Start
+## 🛠️ The Technology Edge
 
-### **1. Backend Setup**
+- **Glassmorphic Interface**: Custom-engineered React 18 UI with frosted-glass depth for a premium mobile-first experience.
+- **Neural Persistence**: Every strategy, chat, and report is architected into a centralized SQLite vault, ensuring your history is never lost.
+- **Precision Mapping**: High-fidelity Leaflet geo-fencing for district-accurate climate and soil intelligence.
+
+---
+
+## ⚡ Setup Architecture
+
+### **Core Backend**
 ```bash
 cd backend
 python -m venv venv
 .\venv\Scripts\activate # Windows
-source venv/bin/activate # Linux
 pip install -r requirements.txt
 python app.py
 ```
 
-### **2. Frontend Setup**
+### **Premium Frontend**
 ```bash
 cd frontend
 npm install
@@ -60,20 +56,13 @@ npm run dev
 
 ---
 
-## � Presentation & Interactive Docs
-The project includes a high-fidelity interactive documentation suite. This is the **primary resource** for understanding the architecture, presentation scripts, and developer blueprints.
+## 📄 High-Fidelity Documentation
+For the full interactive experience, including architecture blueprints and developer presentation scripts, explore our official documentation:
 
-### [👉 OPEN INTERACTIVE DOCUMENTATION 👈](./PROJECT_DOCUMENTATION.html)
-
----
-
-## 📂 Project Structure
-- `backend/`: FastAPI server, database services, and AI orchestrators.
-- `frontend/`: Premium React UI with map grounding and persistent chat.
-- `DEVELOPER_GUIDE.md`: Deep-dive for presentation demos and code structure.
+### [👉 ACCESS INTERACTIVE DOCUMENTATION 👈](./PROJECT_DOCUMENTATION.html)
 
 ---
 <div align="center">
-  <p><b>Smart Agri Advisor | Built with ❤️ for the Indian Farmer</b></p>
+  <p><b>Designed for India. Engineered for Impact.</b></p>
   <p>© 2025 | Aadya Madankar</p>
 </div>

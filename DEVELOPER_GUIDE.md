@@ -17,7 +17,7 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 | **Styling** | Custom Glassmorphism | Premium, lightweight design with optimized conversation bubbles ($14.5px$ readability). |
 | **Persistence** | SQLite (SQLAlchemy) | Unified storage for Users, Analysis History, and Persistent Chat (`chat_messages`). |
 | **Resilience** | Gemini Key Rotator | Automated failover between multiple Gemini API keys to avoid quota limits. |
-| **AI Neural Core**| Google Gemini 1.5/2.5 | High-speed reasoning with **Script-Locking Enforcement**. |
+| **AI Neural Core**| Google Gemini 2.5 Flash | High-speed reasoning with **Script-Locking Enforcement**. |
 | **Grounding** | Serper API + Context | Live Mandi verification with **Hinglish** style-matching. |
 
 ---
