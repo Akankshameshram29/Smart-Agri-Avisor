@@ -6,7 +6,7 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 
 ## 1. Executive Vision (The "Why")
 **Presentation Speech:**
-> "Good morning/afternoon everyone. Today I'm presenting **Smart Agri Advisor**, an AI-driven agricultural advisor. The problem we’re solving is simple but critical: Traditional farming apps rely on static, outdated data. A farmer in Vidarbha might be seeing crop advice based on a database from 2 years ago. Smart Agri Advisor changes this by using **Real-Time Grounding**—our system searches the live internet to find today's Mandi rates before giving advice. It’s not just an app; it’s a high-fidelity market neural network."
+> "Good morning/afternoon everyone. Today I'm presenting **Smart Agri Advisor**, an AI-driven agricultural advisor. The problem we’re solving is simple but critical: Traditional farming apps rely on static, outdated data. A farmer in Vidarbha might be seeing crop advice based on a database from 2 years ago. Smart Agri Advisor changes this by using **Real-Time Grounding**—our system searches the live internet to find today's Mandi rates before giving advice. It’s not just an app; it’s a high-fidelity market intelligence engine."
 
 ---
 
@@ -15,7 +15,7 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 | :--- | :--- | :--- |
 | **Frontend** | React 18, TypeScript | Type-safe, high-performance UI components. |
 | **Styling** | Tailwind CSS | Premium Glassmorphic design and responsive layout. |
-| **Maps** | Leaflet.js + OpenStreetMap | Interactive satellite-aided farm plot selection. |
+| **Maps** | Leaflet.js + OpenStreetMap | Interactive farm plot location selection. |
 | **Logic Engine**| Python FastAPI | Asynchronous handling of complex AI/Search requests. |
 | **AI Neural Core**| Google Gemini 1.5/3.0 | Multi-modal reasoning and JSON schema generation. |
 | **Data Layer** | SQLAlchemy + SQLite | Relational persistence for chronological farmer logs. |
@@ -25,8 +25,8 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 
 ## 3. Deep-Dive: Core Technical Mechanics
 
-### A. Satellite-to-District Resonance
-When you tap the map, we don't just get coordinates. We run a **Neural Geofencing** check.
+### A. Geo-Coordinate Resolution
+When you tap the map, we don't just get coordinates. We run a **Coordinate Validation** check.
 1.  **Polygon Validation**: We check if the `Lat/Lng` is within the `indiaBoundary` GeoJSON.
 2.  **AI District Mapping**: The coordinates are sent to Gemini to resolve the exact **Agricultural District** and **State**, ensuring the search is hyper-local.
 

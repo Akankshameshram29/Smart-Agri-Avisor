@@ -301,13 +301,13 @@ const App: React.FC = () => {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
               <div className="lg:col-span-4 bg-emerald-950 rounded-[48px] p-8 md:p-10 text-white relative overflow-hidden shadow-2xl flex flex-col">
                 <div className="absolute top-0 right-0 p-12 opacity-10 pointer-events-none">
-                  <i className="fas fa-satellite-dish text-[200px] text-emerald-400"></i>
+                  <i className="fas fa-location-crosshairs text-[200px] text-emerald-400"></i>
                 </div>
 
                 <div className="relative z-10 flex-1">
                   <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-emerald-500/30">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    {trainingCount >= 3 ? 'Neural Profile Active' : 'Initial Sync'}
+                    {trainingCount >= 10 ? 'Neural Profile Active' : 'Initial Sync'}
                   </div>
                   <h2 className="text-4xl font-heading mb-6">
                     Smart Agri <br />
@@ -316,26 +316,26 @@ const App: React.FC = () => {
 
                   <div className="space-y-6 mb-10">
                     <div className="flex justify-between items-end text-[10px] font-black text-emerald-500/60 uppercase tracking-widest">
-                      <span>User Identity Lock</span>
-                      <span>{trainingCount}/3 Syncs</span>
+                      <span>User Profile Progress</span>
+                      <span>{trainingCount}/10 Reports</span>
                     </div>
                     <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                       <div
                         className="h-full bg-emerald-500 transition-all duration-1000"
-                        style={{ width: `${Math.min((trainingCount / 3) * 100, 100)}%` }}
+                        style={{ width: `${Math.min((trainingCount / 10) * 100, 100)}%` }}
                       ></div>
                     </div>
                     <p className="text-emerald-100/40 text-[11px] font-medium leading-relaxed">
-                      {trainingCount >= 3
+                      {trainingCount >= 10
                         ? "AI recognizes your regional patterns for account +91 " + user.phone.slice(-4)
-                        : `Generate ${3 - trainingCount} more reports to enable hybrid localized reasoning.`}
+                        : `Generate ${10 - trainingCount} more reports to enable localized adaptive reasoning.`}
                     </p>
                   </div>
 
                   <div className="bg-white/5 backdrop-blur-md rounded-2xl p-6 border border-white/10 mb-6">
                     <p className="text-xs font-bold text-emerald-200/80 leading-relaxed">
                       <i className="fas fa-map-pin mr-2 text-emerald-500"></i>
-                      Our service is currently optimized for Indian Mandis. Please tap within the highlighted green border.
+                      Our service is currently optimized for Indian Mandis. Please tap on your farm location on the map.
                     </p>
                   </div>
                 </div>
@@ -356,8 +356,8 @@ const App: React.FC = () => {
                         ))
                       ) : (
                         <div className="text-emerald-100/40 space-y-2">
-                          <div className="flex items-start gap-3"><span className="text-emerald-800">{'>>'}</span> Satellite sync complete.</div>
-                          <div className="flex items-start gap-3"><span className="text-emerald-800">{'>>'}</span> Verified Mandi rates for Nagpur.</div>
+                          <div className="flex items-start gap-3"><span className="text-emerald-800">{'>>'}</span> Geolocation sync complete.</div>
+                          <div className="flex items-start gap-3"><span className="text-emerald-800">{'>>'}</span> Verified Mandi rates for region.</div>
                           <div className="flex items-start gap-3"><span className="text-emerald-800">{'>>'}</span> Weather cycle analysis finalized.</div>
                         </div>
                       )}

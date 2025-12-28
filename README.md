@@ -1,74 +1,69 @@
-# Smart Agri Advisor: Neural Krishi Expert 🌾
+# Smart Agri Advisor: AI-Powered Mandi Expert 🌾
 
 [![V1.0.0 Production Release](https://img.shields.io/badge/Release-V1.0.0-emerald?style=for-the-badge)](https://github.com/Aadya-Madankar/Smart-Agri-Avisor)
 [![AI Engine](https://img.shields.io/badge/AI_Engine-Google_Gemini-blue?style=for-the-badge)](https://ai.google.dev/)
-[![Location Strategy](https://img.shields.io/badge/Strategy-Satellite_Agnostic-orange?style=for-the-badge)](#)
+[![Location Strategy](https://img.shields.io/badge/Strategy-Location--Aware-orange?style=for-the-badge)](#)
 
-> **The world's first satellite-driven AI Krishi Expert for Indian farmers.** Providing high-fidelity Mandi intelligence and chronological market forecasts.
+> **A high-precision AI decision-support system for Indian farmers.** Combining real-time Mandi search grounding with historical price trends and predictive analysis.
 
 ---
 
 ## 🚀 Vision
-Smart Agri Advisor is not just a tool; it's a **Verification Pipeline**. It eliminates AI hallucinations by grounding its reasoning in real-time Mandi data fetched directly from the local markets of India. It bridges the gap between complex satellite data and actionable village-level insights.
+Smart Agri Advisor is a **Verification Pipeline** designed to provide farmers with reliable, data-backed agricultural insights. It eliminates AI "hallucinations" by grounding its reasoning in real-time web data (Mandi rates) and personalizing recommendations based on the user's localized search history.
 
 ---
 
-## 🛠️ Advanced Technological Stack
+## 🛠️ Technological Stack
 
 ### **Frontend Layer**
-- **React 18 + TypeScript**: For a type-safe, ultra-responsive UI engine.
-- **Tailwind CSS**: High-fidelity custom design system with Glassmorphism support.
-- **Leaflet Engine**: High-performance satellite map interaction for plot detection.
-- **Recharts Neural API**: Sophisticated price trend and risk-bound visualizations.
+- **React 18 + TypeScript**: For a type-safe, responsive UI.
+- **Tailwind CSS**: Modern design system with efficient, utility-first styling.
+- **Leaflet Engine**: Interactive map interaction for precise location selection.
+- **Recharts**: Data visualization for price history and future trends.
 
 ### **Backend & Intelligence**
-- **Python FastAPI**: High-concurrency asynchronous server logic.
-- **Google Gemini Neural Core**: Running Gemini 1.5/3.0 for multilingual crop analysis.
-- **Hybrid Search Grounding**: Real-time Google Search integration for actual Mandi prices.
-- **SQLAlchemy + SQLite**: Local-first data persistence for farmer record logs.
+- **Python FastAPI**: High-performance asynchronous API server.
+- **Google Gemini 3.0**: Advanced reasoning engine for geological and agricultural analysis.
+- **Hybrid Search Grounding**: Integration with Google Search (via Serper) to fetch live Mandi prices.
+- **SQLAlchemy + SQLite**: Robust data persistence for user history and personalization.
 
 ---
 
-## ⚙️ Operational Mechanism
+## ⚙️ How It Works (Actual Mechanism)
 
-1.  **Satellite Plot Lock**: The user navigates the responsive Leaflet map to their village geographical center. Upon tapping the screen, the system fetches high-precision coordinates inside the India boundary.
-2.  **Neural Site Search**: The backend initializes a Hybrid Search Orchestration. It triggers native Google Search Grounding to find actual, real-time prices in local Mandis.
-3.  **Advanced Forecasting**: Unlike static apps, Smart Agri Advisor performs chronological analysis. It creates a **9-point temporal window**: 4 months of history, today's pivot rate, and a 4-month 2026 forecast.
+1.  **Map-Based Geo-Tagging**: The user selects their farm's location on an interactive map. The system captures the precise geocoordinates (Latitude/Longitude).
+2.  **Geo-Resolution**: The AI resolves these coordinates into a specific **Agricultural District and State** in India.
+3.  **Live Mandi Grounding**: The system performs a live search for the latest crop prices in the identified district's Mandis.
+4.  **Adaptive Personalization**: After 3 searches in a specific region, the system begins to inject historical "regional patterns" from the user's own database into the AI context, providing more personalized advice.
+5.  **9-Point Temporal Insight**: Generates a timeline showing 4 months of history, today's verified rate, and a 4-month market projection.
 
 ---
 
-## 📊 Differentiation: Smart Agri Advisor vs. The Old Way
+## 📊 Comparison: Smart Agri Advisor vs. Traditional Methods
 
-| Feature | Traditional Apps | Smart Agri Advisor Neural |
+| Feature | Static Apps/Databases | Smart Agri Advisor |
 | :--- | :--- | :--- |
-| **Data Recency** | Static databases (6-12 months old) | **Live Search Grounding** (Refreshed hourly) |
-| **Forecasting** | No risk-bound/volatility tracking | **2026 AI Projections** with Risk Bounds |
-| **Entry Point** | Manual data entry for every plot | **1-Tap Satellite Analysis** |
-| **Strategy** | Generic advice (Call help center) | **Hyper-local fertilization & recovery** |
+| **Price Data** | Often outdated (months old) | **Live Verified Rates** (Refreshed via Search) |
+| **Personalization** | Generic for the whole state | **Adaptive** (Learns from your history) |
+| **Location** | Manual district selection | **1-Tap Map Pinning** |
+| **Forecasting** | Simple averages | **Predictive Analysis** with Risk Bounds |
 
 ---
 
-## 💻 Developer Analysis & Setup
+## 💻 Developer Setup
 
-### **Core Innovation: Hybrid Search**
-The primary technical differentiator is our **Verification Pipeline**. We use the Serper API/Google Search Tool as a deterministic layer to fetch raw text from Mandi websites. The LLM (Gemini) acts as the reasoner, parsing this messy web data into a clean JSON structure for our UI.
-
-### **Quick Start**
-
-#### 1. Backend Setup
+### **1. Backend**
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: .\venv\Scripts\activate
+source venv/bin/activate  # Windows: .\venv\Scripts\activate
 pip install -r requirements.txt
 
-# Create a .env file
-# API_KEY=your_gemini_api_key
-# SERPER_API_KEY=your_serper_key
+# Create .env with Gemini API Key
 python app.py
 ```
 
-#### 2. Frontend Setup
+### **2. Frontend**
 ```bash
 cd frontend
 npm install
@@ -81,12 +76,12 @@ npm run dev
 ```
 smart-agri-advisor/
 ├── backend/             # Python FastAPI Server (Neural Core)
-├── frontend/            # React TypeScript Application (High-Fidelity UI)
+├── frontend/            # React TypeScript Application (UI)
 ├── DEVELOPER_GUIDE.md   # Technical Deep-Dive & Demo Script
-├── PROJECT_DOCUMENTATION.html # Premium Web Archive of Docs
+├── PROJECT_DOCUMENTATION.html # Project Documentation Archive
 └── README.md            # You are here
 ```
 
 ---
 
-*Smart Agri Advisor Neural | © 2025*
+*Smart Agri Advisor | © 2025*

@@ -46,7 +46,7 @@ class AgentService:
         client = self._get_client()
         today = datetime.now()
         today_str = today.strftime('%d %B %Y')
-        is_trained = global_count >= 3
+        is_trained = global_count >= 10
         
         orchestration_log = []
         
@@ -77,7 +77,7 @@ class AgentService:
         
         district = geo.get('district', 'Rural Pocket')
         state = geo.get('state', 'India')
-        orchestration_log.append(f"Satellite lock: {lat:.4f}, {lng:.4f}")
+        orchestration_log.append(f"Geo-lock established: {lat:.4f}, {lng:.4f}")
         orchestration_log.append(f"Resolved: {district}, {state}")
         
         # Step 2: Hybrid Search Orchestration
