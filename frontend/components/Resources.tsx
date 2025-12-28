@@ -8,11 +8,13 @@ const Resources: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
 
   const categories = ['All', 'Schemes', 'Techniques', 'Pest Control', 'Weather News', 'Market Insights'];
 
   const loadResources = async (query: string = '', cat: string = 'All') => {
     setLoading(true);
+    setHasSearched(true);
     try {
       const results = await geminiService.searchResources(query, cat);
       setArticles(results);
@@ -24,7 +26,9 @@ const Resources: React.FC = () => {
   };
 
   useEffect(() => {
-    loadResources('', activeCategory);
+    if (hasSearched) {
+      loadResources('', activeCategory);
+    }
   }, [activeCategory]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -126,7 +130,21 @@ const Resources: React.FC = () => {
                   <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 text-slate-300 shadow-sm">
                     <i className="fas fa-magnifying-glass text-3xl"></i>
                   </div>
-                  <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">No matching articles found in current vault.</p>
+                  <p className="text-slate-400 font-bold uppercase tracking-widest text-xs mb-8">
+                    {hasSearched
+                      ? 'No matching articles found in current vault.'
+                      : activeCategory === 'All'
+                        ? 'Search for government schemes, technical guides, or market insights.'
+                        : `Access verified information and guides regarding ${activeCategory}.`}
+                  </p>
+                  {!hasSearched && (
+                    <button
+                      onClick={() => loadResources('', activeCategory)}
+                      className="bg-emerald-600 text-white px-10 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-emerald-700 transition-all shadow-xl active:scale-95"
+                    >
+                      {activeCategory === 'All' ? 'Explore All Knowledge' : `Search for ${activeCategory}`}
+                    </button>
+                  )}
                 </div>
               )}
             </div>
