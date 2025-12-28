@@ -13,11 +13,11 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 ## 2. Advanced Technology Stack
 | Layer | Technologies | Role in Project |
 | :--- | :--- | :--- |
-| **Frontend** | React 18, TypeScript | Type-safe, high-performance UI components. |
-| **Styling** | Custom Glassmorphism | Premium, lightweight design with optimized conversation bubbles. |
-| **Logic Engine**| Python FastAPI | Asynchronous handling of complex AI/Search requests. |
-| **Resilience** | Gemini Key Rotator | Automated failover between multiple Gemini 2.5 API keys to avoid quota limits. |
-| **AI Neural Core**| Google Gemini 2.5 Flash | High-speed reasoning with **Full Conversation History** support. |
+| **Frontend** | React 18, TypeScript | Type-safe, high-performance UI components with lifted-state persistence. |
+| **Styling** | Custom Glassmorphism | Premium, lightweight design with optimized conversation bubbles ($14.5px$ readability). |
+| **Persistence** | SQLite (SQLAlchemy) | Unified storage for Users, Analysis History, and Persistent Chat (`chat_messages`). |
+| **Resilience** | Gemini Key Rotator | Automated failover between multiple Gemini API keys to avoid quota limits. |
+| **AI Neural Core**| Google Gemini 1.5/2.5 | High-speed reasoning with **Script-Locking Enforcement**. |
 | **Grounding** | Serper API + Context | Live Mandi verification with **Hinglish** style-matching. |
 
 ---
@@ -27,42 +27,42 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 ### A. Automated API Key Rotation (Failover Engine)
 To prevent the "429 Rate Limit" error common in production AI apps, we implemented a **Rotation Wrapper**:
 1.  The backend stores multiple API keys in the `.env` file.
-2.  If one key hits a quota limit, the `GeminiKeyRotator` automatically detects the failure.
+2.  If one key hits a quota limit, the `GeminiService` automatically detects the failure.
 3.  It instantly switches to the next available key and retries the request seamlessly, ensuring the farmer never sees an error.
 
-### B. Hinglish & Multi-Language Logic
-We solved the "formal language barrier" by implementing **Style-Matching**:
-- The AI detects if the user is typing in Pure Hindi, English, or a mix (**Hinglish**).
-- It responds using the **exact same language ratio** and tone, building immediate trust with the user.
+### B. Advanced Script-Locking Logic
+We solved the "language leakage" problem where AI often defaults to Devanagari script for Hinglish:
+- **Character Scanning**: The backend scans every user message for Latin vs Devanagari characters.
+- **Dynamic Prompt Injection**: If Latin characters are detected (e.g., "Kaise ho?"), the system injects a mandatory script-clamping rule into the AI's short-term memory, forcing it to stick to the Latin script for that response.
 
-### C. Neural Conversation Memory
-Unlike standard chatbots, our system maintains a **sliding window of the last 10 messages**.
-- This allows the farmer to ask follow-up questions like *"What about the fertilizer for the crop I mentioned earlier?"*
-- The backend injects this history into the Gemini context for every single interaction.
+### C. Persistent Chat Architecture
+Unlike standard chatbots that lose memory on a page refresh:
+- **Lifted State**: Chat state is managed at the `App.tsx` level, surviving tab switches between Dashboard and Chat.
+- **DB Persistence**: Every message is committed to SQLite. On re-login or tab-return, the application fetches the last 50 messages, ensuring the farmer's context is never lost.
 
 ---
 
 ## 4. Developer Presentation Script (The Demo Walkthrough)
 
-### Phase 1: Authentication & Onboarding
+### Phase 1: Onboarding & Identity
 **Script:**
-> "Notice the UI—it's designed to be 'Village-Simple' but 'Premium.' We use a phone-based login system. You see the 'Live Grounding' indicator? That means the system is connected to our resilience layer, rotating keys in the background to ensure reliable service."
+> "Look at our 'Neural Onboarding' flow. It's not just a login; it's identity creation. We capture the farmer's name and phone number, which instantly personalizes the entire experience. The background database links their specific search history to their identity."
 
-### Phase 2: The Conversational Advisor
+### Phase 2: The Streaming Advisor
 **Script:**
-> "Let's talk to the advisor. I'll ask a question in Hinglish: *'Bhindi ka rate kya hai and konsa fertilizer best hai?'* Notice how the AI responds in a friendly, mixed-language style and uses **₹/kg** for pricing here, making it easy for me to plan my daily expenses."
+> "Let's ask the advisor a question. Watch how the words appear. We implemented **Simulated Character Streaming** to give it a human-like feedback rhythm. Notice the markdown-to-card rendering—bold headers are stripped and converted into professional layout blocks for better readability on small screens."
 
-### Phase 3: Analyzing the Charts
+### Phase 3: Analyzing the Reports
 **Script:**
-> "In the detailed crop view, we standardize everything to **₹/kg** for the farmer's convenience, while keeping **₹/Quintal** on the main dashboard for Mandi-standard trading. This dual-unit logic is a direct response to actual farmer workflows."
+> "In the detailed report, we've minimized visual noise by reducing the background grains and high-contrast green tints. We've switched to a card-based strategy layout, making the 'Verified Strategy' feel clean and professional rather than a cluttered list."
 
 ---
 
 ## 5. Differentiation & Competitive Edge
 
 1.  **Deterministic Verify Pipeline**: We ground responses in live web results using the Serper API.
-2.  **Empathy-Focused Prompts**: Our system prompt is tuned to acknowledge farmer losses/problems before providing technical advice.
-3.  **Hinglish Mastery**: Native support for the most common agricultural conversational style in India.
+2.  **Stateful Memory**: Persistent database storage for conversations—surviving restarts and tab switches.
+3.  **Script Continuity**: Perfect Hinglish execution (Latin script matching) for natural rural adoption.
 4.  **Resilient Architecture**: Built-in API rotation makes this a production-ready enterprise solution.
 
 ---
@@ -73,6 +73,6 @@ Unlike standard chatbots, our system maintains a **sliding window of the last 10
 - **Voice-First Interaction**: Allowing farmers to use voice commands in regional languages via Gemini's multi-modal capabilities.
 
 ---
-**Smart Agri Advisor V1.1.0 Documentation**  
+**Smart Agri Advisor V1.2.0 Documentation**  
 *Developer: Project Lead*  
 *Date: December 28, 2025*
