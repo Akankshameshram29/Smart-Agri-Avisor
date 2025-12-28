@@ -1,12 +1,12 @@
-# AgroSmart: Intelligent Crop Advisor - Developer Analysis & Demo Blueprint
+# Smart Agri Advisor: Neural Krishi Expert - Developer Analysis & Demo Blueprint
 
-This document provides a comprehensive, deep-dive analysis of the **AgroSmart Neural Advisor**. It is structured to act as both a technical manual and a **presentation script** for developers to explain the project during a live demo.
+This document provides a comprehensive, deep-dive analysis of the **Smart Agri Advisor**. It is structured to act as both a technical manual and a **presentation script** for developers to explain the project during a live demo.
 
 ---
 
 ## 1. Executive Vision (The "Why")
 **Presentation Speech:**
-> "Good morning/afternoon everyone. Today I'm presenting **AgroSmart**, an AI-driven agricultural advisor. The problem we’re solving is simple but critical: Traditional farming apps rely on static, outdated data. A farmer in Vidarbha might be seeing crop advice based on a database from 2 years ago. AgroSmart changes this by using **Real-Time Grounding**—our system searches the live internet to find today's Mandi rates before giving advice. It’s not just an app; it’s a high-fidelity market neural network."
+> "Good morning/afternoon everyone. Today I'm presenting **Smart Agri Advisor**, an AI-driven agricultural advisor. The problem we’re solving is simple but critical: Traditional farming apps rely on static, outdated data. A farmer in Vidarbha might be seeing crop advice based on a database from 2 years ago. Smart Agri Advisor changes this by using **Real-Time Grounding**—our system searches the live internet to find today's Mandi rates before giving advice. It’s not just an app; it’s a high-fidelity market neural network."
 
 ---
 
@@ -31,7 +31,7 @@ When you tap the map, we don't just get coordinates. We run a **Neural Geofencin
 2.  **AI District Mapping**: The coordinates are sent to Gemini to resolve the exact **Agricultural District** and **State**, ensuring the search is hyper-local.
 
 ### B. The 9-Point Chronological Engine (Our Most Unique Feature)
-Most apps show today's price. AgroSmart shows a **Timeline**.
+Most apps show today's price. Smart Agri Advisor shows a **Timeline**.
 - **Historical (T-4 to T-1)**: Fetches actual rates from the last 4 months.
 - **Pivot (T)**: The "Live Rate" found via Google Search Grounding.
 - **Forecast (T+1 to T+4)**: AI-driven projections for **2026** including "Bearish" risk bounds.
@@ -68,6 +68,6 @@ Most apps show today's price. AgroSmart shows a **Timeline**.
 - **Voice-First Interaction**: Allowing farmers to use voice commands in regional languages (Hindi, Marathi, Telugu) via Gemini's multi-modal capabilities.
 
 ---
-**AgroSmart V1.0.0 Documentation**  
+**Smart Agri Advisor V1.0.0 Documentation**  
 *Developer: Project Lead*  
 *Date: December 28, 2025*

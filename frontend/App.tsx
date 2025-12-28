@@ -74,17 +74,17 @@ const App: React.FC = () => {
   ];
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('agrosmart_session');
+    const savedUser = localStorage.getItem('smart_agri_advisor_session');
     if (savedUser) setUser(JSON.parse(savedUser));
   }, []);
 
   const handleLogin = (u: User) => {
-    localStorage.setItem('agrosmart_session', JSON.stringify(u));
+    localStorage.setItem('smart_agri_advisor_session', JSON.stringify(u));
     setUser(u);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('agrosmart_session');
+    localStorage.removeItem('smart_agri_advisor_session');
     setUser(null);
     setAnalysis(null);
     setHistory([]);
@@ -564,7 +564,7 @@ const App: React.FC = () => {
             </div>
           ) : (
             <>
-              <p className="text-emerald-100/30 text-[10px] font-black uppercase tracking-[0.5em] mb-8">AgroSmart Neural V6.8</p>
+              <p className="text-emerald-100/30 text-[10px] font-black uppercase tracking-[0.5em] mb-8">Smart Agri Advisor Neural V1.0</p>
               <button
                 onClick={cancelAnalysis}
                 className="px-8 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"

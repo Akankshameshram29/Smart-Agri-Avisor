@@ -4,7 +4,7 @@ import json
 
 
 class DatabaseService:
-    """Database operations for AgroSmart."""
+    """Database operations for Smart Agri Advisor."""
     
     def get_or_create_user(self, db, phone: str, name: str = "Farmer") -> User:
         """Get existing user or create new one."""

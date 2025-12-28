@@ -1,6 +1,6 @@
-# AgroSmart Frontend - React Application
+# Smart Agri Advisor Frontend - React Application
 
-This is the React TypeScript frontend for the AgroSmart Intelligent Crop Advisor.
+This is the React TypeScript frontend for the Smart Agri Advisor.
 
 ## Setup
 

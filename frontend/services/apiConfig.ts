@@ -1,5 +1,5 @@
 /**
- * API Configuration for Flask Backend
+ * API Configuration for FastAPI Backend
  */
 
 // Backend API base URL
@@ -13,19 +13,19 @@ export async function apiRequest<T>(
   options: RequestInit = {}
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  
+
   const defaultOptions: RequestInit = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
-  
+
   const response = await fetch(url, { ...defaultOptions, ...options });
-  
+
   if (!response.ok) {
     const error = await response.json().catch(() => ({ error: 'Request failed' }));
     throw new Error(error.error || 'Request failed');
   }
-  
+
   return response.json();
 }

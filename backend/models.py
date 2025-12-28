@@ -6,7 +6,7 @@ import json
 import os
 
 # Database setup
-DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///agrosmart.db')
+DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///smart_agri_advisor.db')
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

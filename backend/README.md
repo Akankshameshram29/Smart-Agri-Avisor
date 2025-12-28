@@ -1,6 +1,6 @@
-# AgroSmart Backend - FastAPI Server
+# Smart Agri Advisor Backend - FastAPI Server
 
-This is the Python backend for the AgroSmart Intelligent Crop Advisor.
+This is the Python backend for the Smart Agri Advisor.
 
 ## Setup
 
@@ -28,7 +28,7 @@ This is the Python backend for the AgroSmart Intelligent Crop Advisor.
     ```env
     API_KEY=your_google_gemini_api_key
     SERPER_API_KEY=your_serper_api_key   # Optional
-    DATABASE_URL=sqlite:///./agrosmart.db
+    DATABASE_URL=sqlite:///./smart_agri_advisor.db
     CORS_ORIGINS=http://localhost:5173,http://localhost:3000
     ```
 
@@ -62,5 +62,5 @@ This is the Python backend for the AgroSmart Intelligent Crop Advisor.
 
 ## Notes
 
--   The `agrosmart.db` file is auto-generated on the first run.
+-   The `smart_agri_advisor.db` file is auto-generated on the first run.
 -   The `venv/` folder should **not** be committed to Git.
