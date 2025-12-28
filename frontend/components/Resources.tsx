@@ -4,20 +4,25 @@ import { ResourceArticle } from '../types';
 import { geminiService } from '../services/geminiService';
 
 const Resources: React.FC = () => {
-  const [articles, setArticles] = useState<ResourceArticle[]>([]);
+  const [articles, setArticles] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [hasSearched, setHasSearched] = useState<boolean>(false);
 
-  const categories = ['All', 'Schemes', 'Techniques', 'Pest Control', 'Weather News', 'Market Insights'];
+  const categories = ['All', 'Marketplace', 'Schemes', 'Techniques', 'Pest Control', 'Weather News'];
 
   const loadResources = async (query: string = '', cat: string = 'All') => {
     setLoading(true);
     setHasSearched(true);
     try {
-      const results = await geminiService.searchResources(query, cat);
-      setArticles(results);
+      if (cat === 'Marketplace') {
+        const results = await geminiService.searchMarketplace(query || 'agricultural equipment seeds', cat);
+        setArticles(results);
+      } else {
+        const results = await geminiService.searchResources(query, cat);
+        setArticles(results);
+      }
     } catch (error) {
       console.error(error);
     } finally {
@@ -44,9 +49,9 @@ const Resources: React.FC = () => {
           <i className="fas fa-book-open text-[240px] rotate-12"></i>
         </div>
         <div className="relative z-10 max-w-2xl">
-          <h2 className="text-5xl font-heading mb-6 leading-tight">Knowledge Hub</h2>
+          <h2 className="text-5xl font-heading mb-6 leading-tight">Agri-Market Discovery</h2>
           <p className="text-emerald-100/70 text-lg mb-10 font-medium">
-            Access real-time verified agricultural guides, government schemes, and technical research from India's leading agri-portals.
+            Search for equipment, compare marketplace prices across Amazon & Flipkart, or access verified agricultural research.
           </p>
           <form onSubmit={handleSearch} className="flex bg-white/10 backdrop-blur-xl rounded-3xl p-3 border border-white/20 focus-within:ring-4 focus-within:ring-emerald-500/20 transition-all shadow-inner">
             <div className="flex items-center px-4 text-emerald-400">
@@ -56,7 +61,7 @@ const Resources: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search techniques, crop diseases, or new schemes..."
+              placeholder="Search for 'Tata Sickle', 'Mahindra Tractor', or 'Organic Seeds'..."
               className="bg-transparent border-none focus:ring-0 flex-1 py-3 text-white placeholder-emerald-100/30 font-semibold"
             />
             <button type="submit" className="bg-emerald-500 px-8 py-3 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-emerald-400 transition-all shadow-xl active:scale-95">
@@ -74,7 +79,11 @@ const Resources: React.FC = () => {
               {categories.map(cat => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat)}
+                  onClick={() => {
+                    setActiveCategory(cat);
+                    setHasSearched(false);
+                    setArticles([]);
+                  }}
                   className={`px-5 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all border ${activeCategory === cat
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-lg'
                     : 'bg-white text-slate-500 border-slate-200 hover:border-emerald-300'
@@ -96,30 +105,60 @@ const Resources: React.FC = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-8">
-              {articles.map(article => (
-                <div key={article.id} className="bg-white rounded-[40px] p-10 border border-slate-100 flex flex-col gap-6 hover:shadow-2xl transition-all group relative overflow-hidden">
-                  <div className="flex flex-col justify-center space-y-4 flex-1">
+              {articles.map(item => (
+                <div key={item.id} className="bg-white rounded-[40px] p-8 md:p-10 border border-slate-100 flex flex-col md:flex-row gap-8 hover:shadow-2xl transition-all group relative overflow-hidden">
+                  {/* Image Section */}
+                  <div className="w-full md:w-48 h-48 rounded-3xl bg-slate-50 overflow-hidden flex-shrink-0 border border-slate-50 group-hover:border-emerald-100 transition-all">
+                    {item.image ? (
+                      <img src={item.image} alt={item.name || item.title} className="w-full h-full object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-700" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-200">
+                        <i className={`fas ${item.price ? 'fa-tractor' : 'fa-newspaper'} text-5xl`}></i>
+                      </div>
+                    )}
+                  </div>
 
+                  {/* Content Section */}
+                  <div className="flex flex-col justify-center space-y-4 flex-1">
                     <div className="flex items-center gap-3">
                       <span className="px-3 py-1 rounded-full text-[9px] font-black border bg-emerald-50 text-emerald-700 border-emerald-100 uppercase tracking-[0.2em]">
-                        {article.category}
+                        {item.category}
                       </span>
-                      {article.date && (
+                      {item.website_name && (
+                        <span className="px-3 py-1 rounded-full text-[9px] font-black border bg-slate-50 text-slate-500 border-slate-100 uppercase tracking-[0.2em] flex items-center gap-1">
+                          <i className="fas fa-store text-[8px]"></i> {item.website_name}
+                        </span>
+                      )}
+                      {(item.date || item.rating) && (
                         <span className="text-[10px] font-bold text-slate-400">
-                          <i className="far fa-clock mr-1"></i> {article.date}
+                          {item.price ? <><i className="fas fa-star text-amber-400 mr-1"></i> {item.rating || 'N/A'}</> : <><i className="far fa-clock mr-1"></i> {item.date}</>}
                         </span>
                       )}
                     </div>
-                    <h3 className="text-2xl font-heading text-slate-800 leading-tight group-hover:text-emerald-700 transition-colors">{article.title}</h3>
-                    <p className="text-sm text-slate-500 line-clamp-3 leading-relaxed font-medium">{article.excerpt}</p>
+
+                    <h3 className="text-2xl font-heading text-slate-800 leading-tight group-hover:text-emerald-700 transition-colors">
+                      {item.name || item.title}
+                    </h3>
+
+                    {item.price && (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-black text-emerald-600 italic">₹{item.price.toLocaleString('en-IN')}</span>
+                        {item.unit && <span className="text-xs font-bold text-slate-400 capitalize">/ {item.unit}</span>}
+                      </div>
+                    )}
+
+                    <p className="text-sm text-slate-500 line-clamp-2 leading-relaxed font-medium">
+                      {item.description || item.excerpt}
+                    </p>
+
                     <div className="pt-4 flex items-center gap-6">
                       <a
-                        href={article.source_url}
+                        href={item.source_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-emerald-600 text-white px-8 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-emerald-700 transition-all shadow-xl shadow-emerald-100 active:scale-95"
                       >
-                        Read Full Article <i className="fas fa-external-link-alt text-[10px]"></i>
+                        {item.price ? 'View on Store' : 'Read Full Article'} <i className="fas fa-external-link-alt text-[10px]"></i>
                       </a>
                     </div>
                   </div>

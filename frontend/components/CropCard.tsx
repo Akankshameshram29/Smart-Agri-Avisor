@@ -52,10 +52,10 @@ const CropCard: React.FC<Props> = ({ crop, onClick }) => {
   return (
     <div
       onClick={() => onClick(crop.name)}
-      className="group bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm hover:shadow-2xl hover:border-emerald-200 transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between"
+      className="group bg-emerald-50/20 rounded-[40px] p-8 border border-emerald-100/50 shadow-sm hover:shadow-2xl hover:border-emerald-300 hover:bg-emerald-50 transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between"
     >
-      <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
-        <i className="fas fa-leaf text-8xl text-emerald-900"></i>
+      <div className="absolute -right-6 -top-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity pointer-events-none">
+        <i className="fas fa-leaf text-9xl rotate-45 text-emerald-900"></i>
       </div>
 
       <div className="relative z-10 flex flex-col flex-1">

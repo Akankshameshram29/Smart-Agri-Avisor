@@ -127,7 +127,7 @@ const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
         </div>
 
         <div className="p-8 bg-slate-50 text-center">
-          <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em] mb-1">Smart Agri Advisor Identity Engine</p>
+          <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em] mb-1">Smart Agri Advisor Intelligence</p>
           <p className="text-[9px] text-slate-400">Data localized for +91 {user.phone}</p>
         </div>
       </div>

@@ -60,19 +60,19 @@ Unlike standard chatbots that lose memory on a page refresh:
 
 ## 5. Differentiation & Competitive Edge
 
-1.  **Deterministic Verify Pipeline**: We ground responses in live web results using the Serper API.
-2.  **Stateful Memory**: Persistent database storage for conversations—surviving restarts and tab switches.
-3.  **Script Continuity**: Perfect Hinglish execution (Latin script matching) for natural rural adoption.
+1.  **Agri-Market Discovery Engine**: Scrapes and compares relative 2024-2025 pricing across Amazon/Flipkart for machines and seeds.
+2.  **Deterministic Verify Pipeline**: We ground responses in live web results using the Serper API.
+3.  **Stateful Memory**: Persistent database storage for conversations—surviving restarts and tab switches.
 4.  **Resilient Architecture**: Built-in API rotation makes this a production-ready enterprise solution.
 
 ---
 
 ## 6. Future Scalability (Developer's Vision)
-- **Direct Mandi Integration**: Connecting via API to the e-NAM (National Agriculture Market) platform.
+- **Direct Marketplace Checkout**: Integrating payment gateways for one-click seed purchases.
 - **Drone Logic Integration**: Uploading drone imagery for hyper-local pest detection.
 - **Voice-First Interaction**: Allowing farmers to use voice commands in regional languages via Gemini's multi-modal capabilities.
 
 ---
-**Smart Agri Advisor V1.2.0 Documentation**  
+**Smart Agri Market Documentation**  
 *Developer: Project Lead*  
 *Date: December 28, 2025*

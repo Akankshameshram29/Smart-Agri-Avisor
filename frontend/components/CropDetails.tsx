@@ -48,7 +48,7 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-emerald-950/60 backdrop-blur-sm" onClick={onClose}></div>
-      <div className="relative bg-white w-full max-w-4xl h-[90vh] rounded-[40px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+      <div className="relative bg-emerald-50/95 backdrop-blur-2xl w-full max-w-4xl h-[90vh] rounded-[40px] shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300 border border-white/40">
 
         {/* Modal Header */}
         <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-emerald-50/30 shrink-0">
@@ -319,7 +319,7 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
 
         {/* Modal Footer */}
         <div className="px-10 py-5 bg-slate-50 border-t border-slate-100 flex items-center justify-between shrink-0">
-          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Smart Agri Advisor Identity Engine v6.80</p>
+          <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Smart Agri Advisor Intelligence</p>
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
             <span className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Verified Market Intelligence</span>

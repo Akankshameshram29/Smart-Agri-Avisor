@@ -421,15 +421,17 @@ const App: React.FC = () => {
 
                 <SoilDashboard data={analysis.soil} />
 
-                <div className="space-y-6 px-4">
-                  <h3 className="text-xl font-bold text-slate-800 flex items-center gap-3">
-                    <i className="fas fa-seedling text-emerald-600"></i>
-                    Recommended Profitable Crops
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {analysis.crops.map((crop, idx) => (
-                      <CropCard key={idx} crop={crop as any} onClick={handleCropClick} />
-                    ))}
+                <div className="bg-white/60 backdrop-blur-xl rounded-[60px] p-10 border border-slate-100/50 shadow-inner">
+                  <div className="space-y-6">
+                    <h3 className="text-xl font-bold text-slate-800 flex items-center gap-3 ml-4">
+                      <i className="fas fa-seedling text-emerald-600"></i>
+                      Recommended Profitable Crops
+                    </h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                      {analysis.crops.map((crop, idx) => (
+                        <CropCard key={idx} crop={crop as any} onClick={handleCropClick} />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -505,29 +507,47 @@ const App: React.FC = () => {
 
         {activeTab === 'history' && (
           <div className="space-y-10 px-4 animate-in fade-in duration-500">
-            <div className="max-w-xl">
-              <h2 className="text-4xl font-heading text-slate-800 mb-2">My Mandi Reports</h2>
-              <p className="text-sm text-slate-500 font-medium">Reports isolated for +91 {user.phone}</p>
-              <p className="text-xs text-slate-400 mt-2">Saved reports include only the detailed insights explored during your session.</p>
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div className="space-y-5">
+                <div className="inline-flex items-center gap-2 bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100 shadow-sm">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600">Secure Personal Vault</span>
+                </div>
+                <h2 className="text-4xl md:text-5xl font-heading text-slate-800">My Mandi Reports</h2>
+                <div className="flex flex-col gap-1.5">
+                  <p className="text-sm font-bold text-slate-500">Reports isolated for +91 {user.phone}</p>
+                  <p className="text-xs text-slate-400 max-w-xl italic leading-relaxed">Your stored agricultural intelligence and historical market comparisons from active sessions, protected for your eyes only.</p>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {history.map(record => (
-                <div key={record.id} className="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm hover:shadow-2xl transition-all cursor-pointer group" onClick={() => { setAnalysis(record.data); setActiveTab('history_view'); window.scrollTo(0, 0); }}>
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-slate-50 text-slate-400 group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center transition-all">
-                      <i className="fas fa-history"></i>
-                    </div>
-                    {record.data.crop_details && Object.keys(record.data.crop_details).length > 0 && (
-                      <div className="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border border-emerald-100">
-                        {Object.keys(record.data.crop_details).length} Insights Saved
-                      </div>
-                    )}
+                <div
+                  key={record.id}
+                  className="bg-emerald-50/40 p-10 rounded-[48px] border border-emerald-100/50 shadow-sm hover:shadow-2xl hover:bg-emerald-50 transition-all cursor-pointer group relative overflow-hidden"
+                  onClick={() => { setAnalysis(record.data); setActiveTab('history_view'); window.scrollTo(0, 0); }}
+                >
+                  <div className="absolute -right-8 -bottom-8 opacity-[0.03] group-hover:opacity-[0.07] transition-opacity pointer-events-none">
+                    <i className="fas fa-leaf text-[150px] -rotate-12"></i>
                   </div>
-                  <h3 className="text-2xl font-black text-slate-800 mb-1">{record.district}</h3>
-                  <p className="text-xs font-bold text-slate-400 mb-8">{new Date(record.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-                  <div className="text-xs font-black text-emerald-600 uppercase flex items-center gap-2">
-                    Restore Insights <i className="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+
+                  <div className="relative z-10">
+                    <div className="flex justify-between items-start mb-10">
+                      <div className="w-14 h-14 rounded-2xl bg-white text-emerald-600 shadow-sm group-hover:bg-emerald-600 group-hover:text-white flex items-center justify-center transition-all">
+                        <i className="fas fa-history text-lg"></i>
+                      </div>
+                      {record.data.crop_details && Object.keys(record.data.crop_details).length > 0 && (
+                        <div className="bg-emerald-600 text-white px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest shadow-lg shadow-emerald-200">
+                          {Object.keys(record.data.crop_details).length} Insights Saved
+                        </div>
+                      )}
+                    </div>
+                    <h3 className="text-3xl font-black text-slate-800 mb-2">{record.district}</h3>
+                    <p className="text-xs font-bold text-slate-400 mb-10"> Snapshot: {new Date(record.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+                    <div className="text-xs font-black text-emerald-600 uppercase flex items-center gap-2 group-hover:gap-4 transition-all">
+                      Restore Full Intelligence <i className="fas fa-arrow-right"></i>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -591,7 +611,7 @@ const App: React.FC = () => {
             </div>
           ) : (
             <>
-              <p className="text-emerald-100/30 text-[10px] font-black uppercase tracking-[0.5em] mb-8">Smart Agri Advisor Neural V1.0</p>
+              <p className="text-emerald-100/30 text-[10px] font-black uppercase tracking-[0.5em] mb-8">Smart Agri Advisor Neural Engine</p>
               <button
                 onClick={cancelAnalysis}
                 className="px-8 py-3 bg-white/10 hover:bg-white/20 border border-white/20 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all"

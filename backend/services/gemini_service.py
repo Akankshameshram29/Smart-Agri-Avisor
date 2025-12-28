@@ -305,25 +305,26 @@ class GeminiService:
         }
     
     def search_marketplace(self, query: str, category: str) -> list:
-        """Search for agricultural marketplace products with real-time web grounding."""
+        """Search for agricultural marketplace products with real-time web grounding and price comparison."""
         today = datetime.now().strftime('%Y')
         
         # Step 1: Live Grounding via Serper
-        search_query = f"Buy agricultural {query} {category} India {today} prices store"
+        search_query = f"Buy {query} {category} India {today} prices Amazon Flipkart AgriBegri Bighaat"
         web_context = self._search_web(search_query)
         
-        contents = f"""Find real-time Indian agricultural products. 
-        Category: {category}, Query: {query}.
+        contents = f"""Search and compare Indian agricultural products.
+        Category: {category}, User Query: {query}.
         Today's Year: {today}.
         
-        WEB RESEARCH CONTEXT:
+        WEB RESEARCH CONTEXT (Prices from different sites):
         {web_context}
         
-        STRICT REQUIREMENT:
-        1. Only include products that are currently available and have realistic 2024/2025/2026 pricing.
-        2. FAKE CONTENT CHECK: Only suggest products and links found in the WEB RESEARCH CONTEXT.
-        3. URL VALIDATION: source_url must be a valid Indian e-commerce or agricultural portal.
-        4. No fake reviews or ratings."""
+        INSTRUCTIONS:
+        1. Find 4-6 different listings for the product from different Indian platforms.
+        2. Focus on major platforms (Amazon.in, Flipkart, AgriBegri, BigHaat, Moglix, or Govt Portals).
+        3. FAKE CONTENT CHECK: Only suggest products, prices, and links actually found in the WEB RESEARCH CONTEXT.
+        4. COMPARISON: Ensure 'website_name' reflects where the price is from so users can compare.
+        5. Provide realistic 2024-2025 pricing in ₹."""
         
         item_schema = types.Schema(
             type=types.Type.ARRAY,
@@ -332,7 +333,7 @@ class GeminiService:
                 properties={
                     "id": types.Schema(type=types.Type.STRING),
                     "name": types.Schema(type=types.Type.STRING),
-                    "price": types.Schema(type=types.Type.NUMBER),
+                    "price": types.Schema(type=types.Type.NUMBER, description="Current price in ₹"),
                     "description": types.Schema(type=types.Type.STRING),
                     "image": types.Schema(type=types.Type.STRING),
                     "category": types.Schema(type=types.Type.STRING),
@@ -341,11 +342,10 @@ class GeminiService:
                     "rating": types.Schema(type=types.Type.STRING),
                     "source_url": types.Schema(type=types.Type.STRING),
                 },
-                required=["id", "name", "price", "source_url"]
+                required=["id", "name", "price", "source_url", "website_name"]
             )
         )
         
-        # Using Gemini 2.5 Flash with automatic key rotation
         response = self._generate_content(
             contents=contents,
             config=types.GenerateContentConfig(
@@ -438,7 +438,8 @@ class GeminiService:
         - Use **bold** only for highlighting specific critical values or terms inside sentences.
         - DO NOT use bold markers (**) for titles or headers.
         - Use Bullet points (•) for steps.
-        - PRICING: ALWAYS use ₹/kg format (e.g., ₹45/kg).
+        - PRICING: ALWAYS use ₹/kg format for crops. For equipment, provide the absolute price in ₹ from platforms like Amazon/Flipkart if known.
+        - MARKETPLACE: If the user asks about buying equipment, seeds, or tools, provide specific product names, estimated prices, and mention where they can buy it (e.g., "Available on AgriBegri or Amazon").
         - Keep output clean and free of unnecessary markdown symbols. """
         
         contents = []
