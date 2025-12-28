@@ -28,7 +28,7 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
             <i className="fas fa-leaf"></i>
           </div>
           <div className="hidden sm:block">
-            <h1 className="font-heading text-base text-emerald-950 leading-none">Smart Agri</h1>
+            <h1 className="font-heading text-base text-emerald-950 leading-none tracking-tight">Smart Agri Advisor</h1>
           </div>
         </div>
 
@@ -40,13 +40,24 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
                 onClick={() => onTabChange(tab as AppTab)}
                 className={getTabClass(tab as AppTab)}
               >
-                {tab === 'dashboard' ? 'Advisor' : tab === 'history' ? 'Reports' : tab === 'chat' ? 'Chat' : 'Know'}
+                {tab === 'dashboard' ? 'Advisor' : tab === 'history' ? 'Reports' : tab === 'chat' ? 'Chat' : 'Knowledge'}
               </span>
               {(activeTab === tab || (activeTab === 'history_view' && tab === 'dashboard')) && (
                 <div className="absolute bottom-1 left-4 right-4 h-0.5 bg-emerald-600 rounded-full shadow-[0_0_8px_#10b981]"></div>
               )}
             </div>
           ))}
+          <div className="relative">
+            <a
+              href="/docs.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="relative text-[10px] font-black uppercase tracking-[0.2em] transition-all cursor-pointer px-4 py-2 text-emerald-700 hover:text-emerald-900 group flex items-center gap-2"
+            >
+              <i className="fas fa-file-lines text-[11px]"></i>
+              Docs
+            </a>
+          </div>
         </nav>
 
         {/* User Account Section */}
