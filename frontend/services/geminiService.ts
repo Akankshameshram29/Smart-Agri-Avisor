@@ -81,5 +81,11 @@ export const geminiService = {
 
     const data = await response.json();
     return data.answer;
+  },
+
+  async getChatHistory(phone: string): Promise<{ role: 'user' | 'assistant', content: string }[]> {
+    const response = await fetch(`${API_BASE_URL}/chat/history?phone=${encodeURIComponent(phone)}`);
+    if (!response.ok) return [];
+    return await response.json();
   }
 };

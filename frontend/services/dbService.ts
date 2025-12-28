@@ -4,6 +4,25 @@ import { apiRequest, API_BASE_URL } from "./apiConfig";
 
 class DatabaseService {
   /**
+   * Login or register user in the backend
+   */
+  async login(phone: string, name: string): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, name }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to register/login in database');
+    }
+
+    return await response.json();
+  }
+
+  /**
    * Save analysis to backend database
    */
   async saveAnalysis(phone: string, record: RecommendationResponse): Promise<void> {

@@ -1,4 +1,4 @@
-from models import User, FarmerRecord, SessionLocal
+from models import User, FarmerRecord, ChatMessage, SessionLocal
 from datetime import datetime
 import json
 
@@ -16,6 +16,35 @@ class DatabaseService:
             db.refresh(user)
         return user
     
+    def save_chat_message(self, db, phone: str, role: str, content: str) -> None:
+        """Save a chat message to history."""
+        user = self.get_or_create_user(db, phone)
+        message = ChatMessage(
+            user_id=user.id,
+            role=role,
+            content=content,
+            timestamp=datetime.utcnow()
+        )
+        db.add(message)
+        
+        # Keep only last 100 messages per user to avoid bloat
+        all_msgs = db.query(ChatMessage).filter(ChatMessage.user_id == user.id).order_by(ChatMessage.timestamp.desc()).all()
+        if len(all_msgs) > 100:
+            for old_msg in all_msgs[100:]:
+                db.delete(old_msg)
+                
+        db.commit()
+
+    def get_chat_history(self, db, phone: str, limit: int = 50) -> list:
+        """Retrieve recent chat history for a user."""
+        user = db.query(User).filter(User.phone == phone).first()
+        if not user:
+            return []
+            
+        messages = db.query(ChatMessage).filter(ChatMessage.user_id == user.id).order_by(ChatMessage.timestamp.desc()).limit(limit).all()
+        # Return in correct chronological order
+        return [m.to_dict() for m in reversed(messages)]
+
     def save_analysis(self, db, phone: str, record_data: dict) -> None:
         """Save analysis record for a user."""
         if not phone:

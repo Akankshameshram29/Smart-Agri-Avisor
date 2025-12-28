@@ -422,23 +422,24 @@ class GeminiService:
         - PRIORITIZE the user's specific question over general context. Do not dump soil data (N, P, K) unless the user asks about fertilization or soil.
         - Be a problem-solver, not just a data reporter.
         
-        STRICT LANGUAGE RULE:
-        - IDENTIFY the exact tone and language style used by the user (Hindi, English, Odia, or mixed styles like **Hinglish**).
-        - RESPOND in the same style. If the user uses Hinglish (Hindi written with English words or a mix), you MUST respond in **Hinglish**. 
-        - Match the user's level of formality and language ratio.
+        ### MANDATORY SCRIPT RULE (CRITICAL) ###
+        - If the user writes in the English Alphabet (Latin characters), you MUST respond ONLY in the English Alphabet.
+        - NEVER USE DEVANAGARI (HINDI SCRIPT) if the user is using English letters.
+        - Match Hinglish with Hinglish. Example: "Hi" -> "Hello", "Kaise ho" -> "Main theek hoon".
+        - BAN ON REPETITIVE GREETINGS: Do not start with "Namaste" or "Kisan bhai" every time. Be direct.
         
-        If local context (district, location) is provided, use it to make your advice specific to their climate.
-        Address the farmer with respect (e.g., "Kisan Bhai"). No jargon.
+        EMPATHY & FOCUS:
+        - If the user expresses a problem (loss, pests), acknowledge it first with empathy.
+        - Be a problem-solver, not just a data reporter.
+        
+        If local context is provided, make your advice specific to their climate.
         
         STRICT FORMATTING:
-        - Use **bold** for important solutions.
-        - Use Bullet points (•) for actionable steps.
+        - Use **bold** only for highlighting specific critical values or terms inside sentences.
+        - DO NOT use bold markers (**) for titles or headers.
+        - Use Bullet points (•) for steps.
         - PRICING: ALWAYS use ₹/kg format (e.g., ₹45/kg).
-        - Focus on clear, mobile-friendly advice.
-        
-        CONVERSATION CONTEXT:
-        - You are in a continuous conversation. Remember previous questions and answers.
-        - If the user asks a follow-up, answer based on the previous context."""
+        - Keep output clean and free of unnecessary markdown symbols. """
         
         contents = []
         
@@ -454,8 +455,13 @@ class GeminiService:
             current_text += f"\nBACKGROUND CONTEXT (Farmer Info): {json.dumps(context)}"
             
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=current_text)]))
-            
-        # Using Gemini 2.5 Flash with automatic key rotation
+
+        # SCRIPT DETECTION & ENFORCEMENT
+        is_latin = all(ord(c) < 128 or c in "₹₹" for c in question)
+        if is_latin:
+            system_prompt += "\n\nREQUIRED: User is typing in Latin characters. You MUST respond in Latin script (Hinglish/English). Do NOT use Devanagari characters today."
+        
+        # Using Gemini 2.5 Flash for instruction compliance
         def _call(client):
             return client.models.generate_content(
                 model='gemini-2.5-flash',

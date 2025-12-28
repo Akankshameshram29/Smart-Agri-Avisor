@@ -219,17 +219,36 @@ def search_marketplace(query: str = Query(""), category: str = Query("All")):
 # ==================== CHAT ROUTES ====================
 
 @app.post("/api/chat/ask")
-def ask_question(request: ChatRequest):
-    """Ask an agricultural question to the AI."""
+def ask_question(request: ChatRequest, db: Session = Depends(get_db)):
+    """Ask an agricultural question to the AI and save to history."""
     if not request.question:
         raise HTTPException(status_code=400, detail="Question required")
     
     try:
+        # 1. Save user message to database
+        db_service.save_chat_message(db, request.phone, 'user', request.question)
+        
+        # 2. Get AI answer
         answer = gemini_service.ask_question(request.question, request.history, request.context)
+        
+        # 3. Save AI answer to database
+        db_service.save_chat_message(db, request.phone, 'assistant', answer)
+        
         return {"answer": answer}
     except Exception as e:
         print(f"Chat error: {e}")
+        # Even if AI fails, we already saved the user question. 
+        # But we don't save a failed AI response.
         raise HTTPException(status_code=500, detail="Advisor is currently unavailable.")
+
+
+@app.get("/api/chat/history")
+def get_chat_history(phone: str = Query(...), db: Session = Depends(get_db)):
+    """Get chat history for a user."""
+    if not phone:
+        raise HTTPException(status_code=400, detail="Phone number required")
+    
+    return db_service.get_chat_history(db, phone)
 
 
 # ==================== HEALTH CHECK ====================

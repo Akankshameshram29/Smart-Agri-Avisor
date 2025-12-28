@@ -70,7 +70,7 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
         </div>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto p-8 space-y-12 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-8 py-6 space-y-8 custom-scrollbar">
 
           {/* Price & Forecast Row */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -148,34 +148,34 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
           </div>
 
           {/* Expert Strategy Section */}
-          <div className="bg-white border border-slate-100 rounded-[40px] p-10 shadow-sm space-y-10">
+          <div className="bg-white border border-slate-100 rounded-[32px] p-6 shadow-sm space-y-6">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg">
+              <div className="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-xl shadow-lg">
                 <i className="fas fa-check-double"></i>
               </div>
               <div>
-                <h3 className="text-2xl font-heading text-slate-800">Easy-to-Follow Farming Strategy</h3>
+                <h3 className="text-xl font-heading text-slate-800">Easy-to-Follow Farming Strategy</h3>
                 <p className="text-[10px] text-emerald-600 font-black uppercase tracking-widest">Village-level simple instructions</p>
               </div>
             </div>
 
-            <div className="max-w-none text-sm text-slate-600 leading-relaxed bg-emerald-50/10 p-10 rounded-[48px] border border-emerald-100/50 shadow-inner">
-              <div className="space-y-8">
+            <div className="max-w-none text-sm text-slate-600 leading-relaxed bg-slate-50/50 p-6 rounded-[32px] border border-slate-100 shadow-inner">
+              <div className="space-y-4">
                 {analysis.detailed_strategy.split('\n').map((line, i) => {
                   const trimmedLine = line.trim();
-                  if (!trimmedLine) return <div key={i} className="h-4" />;
+                  if (!trimmedLine) return <div key={i} className="h-1" />;
 
                   // Premium Section Headers
                   if (trimmedLine.startsWith('###')) {
                     return (
-                      <div key={i} className="pt-6 group">
-                        <h4 className="text-emerald-950 font-black text-xl mb-4 flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-sm shadow-lg shadow-emerald-200 group-hover:scale-110 transition-transform">
+                      <div key={i} className="pt-4 group">
+                        <h4 className="text-emerald-950 font-black text-lg mb-2 flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-[10px] shadow-md group-hover:scale-110 transition-transform">
                             <i className="fas fa-seedling"></i>
                           </div>
                           {trimmedLine.replace(/^###\s*\d*\.?\s*/, '').trim()}
                         </h4>
-                        <div className="h-1 w-20 bg-emerald-500/20 rounded-full" />
+                        <div className="h-1 w-12 bg-emerald-500/20 rounded-full" />
                       </div>
                     );
                   }
@@ -184,15 +184,10 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
                   if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
                     const content = trimmedLine.replace(/^[•\-\d+\.]\s*/, '').trim();
                     return (
-                      <div key={i} className="flex gap-6 pl-4 group items-start">
-                        <div className="w-8 h-8 rounded-xl bg-white border border-emerald-100 flex items-center justify-center text-emerald-600 shrink-0 mt-1 shadow-sm group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
-                          <i className="fas fa-check text-xs"></i>
-                        </div>
-                        <div className="bg-white/80 backdrop-blur-md p-6 rounded-[32px] border border-emerald-50 shadow-sm flex-1 group-hover:shadow-xl group-hover:border-emerald-200 transition-all duration-300">
-                          <p className="text-md font-bold text-slate-800 leading-relaxed">
-                            {parseBoldText(content)}
-                          </p>
-                        </div>
+                      <div key={i} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm">
+                        <p className="text-[14.5px] font-bold text-slate-800 leading-[1.6]">
+                          {parseBoldText(content)}
+                        </p>
                       </div>
                     );
                   }
@@ -206,20 +201,20 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-8">
-                <div className="bg-emerald-50 rounded-3xl p-6 border border-emerald-100">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-6">
+                <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100">
                   <h4 className="text-[11px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2 mb-4">
                     <i className="fas fa-coins"></i> Money Gain Plan
                   </h4>
-                  <p className="text-sm font-bold text-slate-800 leading-relaxed italic">
+                  <p className="text-[13px] font-bold text-slate-700 leading-relaxed italic">
                     {(analysis.revenue_estimation && analysis.revenue_estimation.length > 20 && !analysis.revenue_estimation.includes("Estimating"))
                       ? analysis.revenue_estimation
                       : "We expect a very good profit this season if you follow the medicine and water plan correctly."}
                   </p>
                 </div>
 
-                <div className="bg-rose-50 rounded-3xl p-6 border border-rose-100">
+                <div className="bg-rose-50/50 rounded-2xl p-5 border border-rose-100">
                   <h4 className="text-[11px] font-black text-rose-700 uppercase tracking-widest flex items-center gap-2 mb-4">
                     <i className="fas fa-hammer"></i> Disaster Management (Recovery)
                   </h4>

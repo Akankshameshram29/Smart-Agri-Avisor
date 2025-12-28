@@ -11,6 +11,10 @@ interface Message {
 interface Props {
     user: User;
     currentContext?: any;
+    messages: Message[];
+    setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
+    loading: boolean;
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const renderMessage = (text: string) => {
@@ -30,23 +34,23 @@ const renderMessage = (text: string) => {
                     });
                 };
 
-                if (trimmedLine.startsWith('###') || (trimmedLine.includes(':') && trimmedLine.length < 50 && !trimmedLine.startsWith('•'))) {
-                    const headerText = trimmedLine.replace(/^###\s*/, '').trim();
+                if (trimmedLine.startsWith('###') || (trimmedLine.includes(':') && trimmedLine.length < 60 && !trimmedLine.startsWith('•') && !trimmedLine.startsWith('*'))) {
+                    const headerText = trimmedLine.replace(/^###\s*/, '').replace(/\*\*/g, '').trim();
                     return (
                         <div key={lineIdx} className="pt-2 border-b border-emerald-100/30 pb-1 mb-2">
-                            <h4 className="text-emerald-800 font-extrabold text-[13px] uppercase tracking-wide">
+                            <h4 className="text-emerald-800 font-extrabold text-[13.5px] uppercase tracking-wide">
                                 {headerText}
                             </h4>
                         </div>
                     );
                 }
 
-                if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
-                    const content = trimmedLine.replace(/^[•\-\d+\.]\s*/, '').trim();
+                if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || trimmedLine.startsWith('*') || /^\d+\./.test(trimmedLine)) {
+                    const content = trimmedLine.replace(/^[•\-\*\d+\.]\s*/, '').trim();
                     return (
                         <div key={lineIdx} className="flex gap-3 items-start my-1.5 pl-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0 shadow-sm" />
-                            <p className="text-[14px] text-slate-700 leading-[1.6] flex-1">
+                            <p className="text-[14.5px] text-slate-700 leading-[1.6] flex-1">
                                 {parseLineContent(content)}
                             </p>
                         </div>
@@ -63,15 +67,8 @@ const renderMessage = (text: string) => {
     );
 };
 
-const AgriChat: React.FC<Props> = ({ user, currentContext }) => {
-    const [messages, setMessages] = useState<Message[]>([
-        {
-            role: 'assistant',
-            content: `Namaste ${user.name}! 🙏\nI'm your official Agri-Advisor. I have analyzed the Mandi data for **${currentContext?.location?.district || 'your district'}**.\n\n### How can I help you today?\n• Check latest **Crop Prices**\n• Advice on **Pests & Diseases**\n• Optimization of **Fertilizers**\n• **Weather Forecast** impact`
-        }
-    ]);
+const AgriChat: React.FC<Props> = ({ user, currentContext, messages, setMessages, loading, setLoading }) => {
     const [input, setInput] = useState('');
-    const [loading, setLoading] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -93,13 +90,32 @@ const AgriChat: React.FC<Props> = ({ user, currentContext }) => {
         setLoading(true);
 
         try {
-            // Send current messages as history (limiting to last 10 for performance)
             const history = messages.slice(-10);
             const answer = await geminiService.askQuestion(user.phone, userMsg, currentContext, history);
-            setMessages(prev => [...prev, { role: 'assistant', content: answer }]);
+
+            // Start simulated streaming
+            setLoading(false);
+            setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+
+            const words = answer.split(' ');
+            let currentContent = '';
+
+            for (let i = 0; i < words.length; i++) {
+                currentContent += (i === 0 ? '' : ' ') + words[i];
+                const updatedContent = currentContent;
+                setMessages(prev => {
+                    const newMessages = [...prev];
+                    newMessages[newMessages.length - 1] = {
+                        role: 'assistant',
+                        content: updatedContent
+                    };
+                    return newMessages;
+                });
+                // Dynamic speed based on word length
+                await new Promise(resolve => setTimeout(resolve, 15 + Math.random() * 20));
+            }
         } catch (error) {
             setMessages(prev => [...prev, { role: 'assistant', content: "Mandi network busy. Please try again." }]);
-        } finally {
             setLoading(false);
         }
     };
@@ -141,8 +157,8 @@ const AgriChat: React.FC<Props> = ({ user, currentContext }) => {
                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in slide-in-from-bottom-2 duration-500`}>
                         <div className={`flex flex-col group ${msg.role === 'user' ? 'items-end' : 'items-start'} max-w-[85%] md:max-w-[75%]`}>
                             <div className={`px-6 py-4 rounded-[28px] shadow-sm relative transition-all duration-300 ${msg.role === 'user'
-                                    ? 'bg-[#E3F2ED] text-emerald-950 border border-emerald-200/40 rounded-tr-none'
-                                    : 'bg-white/90 backdrop-blur-sm text-slate-700 border border-slate-100 rounded-tl-none ring-1 ring-slate-50'
+                                ? 'bg-[#E3F2ED] text-emerald-950 border border-emerald-200/40 rounded-tr-none'
+                                : 'bg-white/90 backdrop-blur-sm text-slate-700 border border-slate-100 rounded-tl-none ring-1 ring-slate-50'
                                 }`}>
                                 <div className="text-[14.5px] leading-[1.6] font-medium tracking-tight">
                                     {renderMessage(msg.content)}

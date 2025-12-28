@@ -6,7 +6,9 @@ import json
 import os
 
 # Database setup
-DATABASE_URL = os.environ.get('DATABASE_URL', 'sqlite:///smart_agri_advisor.db')
+# Using a consistent path in the backend directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATABASE_URL = os.environ.get('DATABASE_URL', f'sqlite:///{os.path.join(BASE_DIR, "smart_agri_advisor.db")}')
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
@@ -30,14 +32,35 @@ class User(Base):
     name = Column(String(100), nullable=False)
     joined_at = Column(DateTime, default=datetime.utcnow)
     
-    # Relationship to farmer records
+    # Relationships
     records = relationship('FarmerRecord', back_populates='user', cascade='all, delete-orphan')
+    chat_messages = relationship('ChatMessage', back_populates='user', cascade='all, delete-orphan')
     
     def to_dict(self):
         return {
             'phone': self.phone,
             'name': self.name,
             'joinedAt': self.joined_at.isoformat() if self.joined_at else None
+        }
+
+
+class ChatMessage(Base):
+    """Stored chat messages for a user."""
+    __tablename__ = 'chat_messages'
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False, index=True)
+    role = Column(String(20), nullable=False) # 'user' or 'assistant'
+    content = Column(Text, nullable=False)
+    timestamp = Column(DateTime, default=datetime.utcnow)
+    
+    user = relationship('User', back_populates='chat_messages')
+
+    def to_dict(self):
+        return {
+            'role': self.role,
+            'content': self.content,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None
         }
 
 

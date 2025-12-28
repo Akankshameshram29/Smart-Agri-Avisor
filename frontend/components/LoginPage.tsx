@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { User } from '../types';
+import { dbService } from '../services/dbService';
 
 interface Props {
   onLogin: (user: User) => void;
@@ -8,6 +9,7 @@ interface Props {
 
 const LoginPage: React.FC<Props> = ({ onLogin }) => {
   const [phone, setPhone] = useState('');
+  const [name, setName] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState<'phone' | 'otp'>('phone');
   const [loading, setLoading] = useState(false);
@@ -17,6 +19,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
   const handleSendOtp = (e: React.FormEvent) => {
     e.preventDefault();
     if (phone.length !== 10) return alert('Enter a valid 10-digit phone number');
+    if (name.trim().length < 2) return alert('Please enter your full name');
 
     setLoading(true);
     // Simulate API delay
@@ -37,22 +40,27 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     }, 1500);
   };
 
-  const handleVerify = (e: React.FormEvent) => {
+  const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    try {
       // Allow the generated OTP or '1234' for easier testing
       if (otp === generatedOtp || otp === '1234') {
-        onLogin({
-          phone,
-          name: 'Farmer ' + phone.slice(-4),
-          joinedAt: new Date().toISOString()
-        });
+        // REGISTER USER IN DATABASE
+        const result = await dbService.login(phone, name.trim());
+        if (result.success && result.user) {
+          onLogin(result.user);
+        } else {
+          throw new Error('Database registration failed');
+        }
       } else {
         alert('Invalid OTP. Use the code shown in the notification at the top!');
       }
+    } catch (err) {
+      alert('Network Error: Could not connect to Agri-Neural database.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -119,6 +127,22 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
                   />
                 </div>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-emerald-400 uppercase tracking-widest ml-4">Full Name</label>
+                <div className="relative">
+                  <span className="absolute left-6 top-1/2 -translate-y-1/2 text-white/40">
+                    <i className="fas fa-user-circle"></i>
+                  </span>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Aadya Madankar"
+                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 pl-14 pr-6 text-white placeholder:text-white/20 focus:outline-none focus:border-emerald-500 transition-all font-bold"
+                  />
+                </div>
+              </div>
               <button
                 type="submit"
                 disabled={loading}
@@ -160,9 +184,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
             </form>
           )}
 
-          <div className="mt-12 pt-8 border-t border-white/5 text-center">
-            <p className="text-[10px] text-white/20 font-bold uppercase tracking-[0.2em]">Prototype Environment 2.0</p>
-          </div>
+
         </div>
       </div>
     </div>

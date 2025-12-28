@@ -43,6 +43,8 @@ const App: React.FC = () => {
   const [isProfileOpen, setIsProfileOpen] = useState<boolean>(false);
   const [trainingCount, setTrainingCount] = useState<number>(0);
   const [showFailsafe, setShowFailsafe] = useState<boolean>(false);
+  const [chatMessages, setChatMessages] = useState<any[]>([]);
+  const [chatLoading, setChatLoading] = useState<boolean>(false);
 
   const mapRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
@@ -97,8 +99,22 @@ const App: React.FC = () => {
     if (user) {
       dbService.getHistory(user.phone).then(setHistory);
       dbService.getGlobalSearchCount(user.phone).then(setTrainingCount);
+
+      // Load chat history
+      geminiService.getChatHistory(user.phone).then(history => {
+        if (history && history.length > 0) {
+          setChatMessages(history);
+        } else {
+          setChatMessages([
+            {
+              role: 'assistant',
+              content: `Hello ${user.name}! 👋\nI'm your official Agri-Advisor. I've analyzed the market for your region.\n\n### How can I help you today?\n• Current **Mandi Prices**\n• Advice on **Pests & Diseases**\n• Optimization of **Fertilizers**\n• **Weather Forecast** analysis`
+            }
+          ]);
+        }
+      });
     }
-  }, [analysis, user]);
+  }, [user]);
 
   const startAgenticAnalysis = useCallback(async (lat: number, lng: number, forceFastMode: boolean = false) => {
     if (!user) return;
@@ -528,6 +544,10 @@ const App: React.FC = () => {
           <AgriChat
             user={user}
             currentContext={analysis ? { location: analysis.location, soil: analysis.soil } : undefined}
+            messages={chatMessages}
+            setMessages={setChatMessages}
+            loading={chatLoading}
+            setLoading={setChatLoading}
           />
         )}
         {activeTab === 'resources' && <Resources />}
