@@ -15,7 +15,6 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
     const [loading, setLoading] = useState(false);
     const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
 
-    // Handle the name submission step
     const handleNameSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!name.trim() || name.trim().length < 2) {
@@ -43,7 +42,6 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
         }
     };
 
-    // After Clerk auth, check if we need the name step
     React.useEffect(() => {
         if (isLoaded && isSignedIn && clerkUser) {
             const identifier = clerkUser.primaryEmailAddress?.emailAddress ||
@@ -69,7 +67,6 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
         }
     }, [isLoaded, isSignedIn, clerkUser, onLogin]);
 
-    // Loading state
     if (!isLoaded) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-emerald-950">
@@ -81,7 +78,6 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
         );
     }
 
-    // Name entry step (after Clerk auth)
     if (isSignedIn && showNameStep) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-emerald-950 relative overflow-hidden font-sans">
@@ -145,34 +141,44 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
         );
     }
 
-    // Clerk component appearance - matching our premium theme
+    // Clerk appearance with CSS variables for deep theming
     const clerkAppearance = {
+        variables: {
+            colorPrimary: '#10b981',
+            colorBackground: 'transparent',
+            colorText: 'white',
+            colorTextSecondary: 'rgba(255,255,255,0.6)',
+            colorInputBackground: 'rgba(255,255,255,0.1)',
+            colorInputText: 'white',
+            borderRadius: '16px',
+        },
         elements: {
-            rootBox: 'w-full',
-            card: 'bg-transparent shadow-none p-0 gap-4',
+            rootBox: 'w-full clerk-root',
+            card: 'bg-transparent shadow-none p-0',
             headerTitle: 'hidden',
             headerSubtitle: 'hidden',
-            socialButtonsBlockButton: 'bg-white hover:bg-gray-50 text-gray-800 border-0 rounded-2xl py-4 font-bold shadow-lg transition-all hover:scale-[1.02]',
-            socialButtonsBlockButtonText: 'font-bold text-sm',
+            socialButtonsBlockButton: 'bg-white hover:bg-gray-100 text-gray-800 border-0 rounded-2xl py-4 font-semibold shadow-lg transition-all hover:scale-[1.02]',
+            socialButtonsBlockButtonText: 'font-semibold text-sm text-gray-700',
             socialButtonsProviderIcon: 'w-5 h-5',
-            dividerLine: 'bg-white/20',
-            dividerText: 'text-white/60 text-xs',
-            formFieldLabel: 'text-emerald-400 text-[10px] font-black uppercase tracking-widest',
-            formFieldInput: 'bg-white/10 border-white/20 text-white placeholder:text-white/30 rounded-2xl py-4 px-4 focus:border-emerald-500 focus:ring-emerald-500/20',
-            formButtonPrimary: 'bg-emerald-500 hover:bg-emerald-400 rounded-2xl font-black shadow-xl shadow-emerald-900/40 py-4 text-sm normal-case',
+            dividerLine: 'bg-white/30',
+            dividerText: 'text-white/50 text-xs bg-transparent',
+            formFieldLabel: 'text-emerald-400 text-[10px] font-black uppercase tracking-widest mb-2',
+            formFieldInput: 'bg-white/10 border-white/20 text-white rounded-2xl py-4 px-4 placeholder:text-white/40',
+            formFieldAction: 'text-emerald-400 hover:text-emerald-300 text-xs font-semibold',
+            formButtonPrimary: 'bg-emerald-500 hover:bg-emerald-400 rounded-2xl font-bold shadow-xl py-4 text-sm normal-case',
             footerAction: 'hidden',
-            footerActionLink: 'text-emerald-400 hover:text-emerald-300',
+            footerActionText: 'hidden',
+            footerActionLink: 'hidden',
             identityPreview: 'bg-white/10 border-white/20 rounded-2xl',
             identityPreviewText: 'text-white',
-            identityPreviewEditButton: 'text-emerald-400 hover:text-emerald-300',
-            formFieldInputShowPasswordButton: 'text-white/60 hover:text-white',
-            otpCodeFieldInput: 'bg-white/10 border-white/20 text-white text-center text-2xl rounded-xl',
-            alternativeMethodsBlockButton: 'text-emerald-400 hover:text-emerald-300 text-xs',
+            identityPreviewEditButton: 'text-emerald-400',
+            formFieldInputShowPasswordButton: 'text-white/60',
+            otpCodeFieldInput: 'bg-white/10 border-white/20 text-white text-2xl rounded-xl',
+            alternativeMethodsBlockButton: 'text-emerald-400 hover:text-emerald-300 text-xs font-semibold',
+            formResendCodeLink: 'text-emerald-400',
+            alert: 'bg-rose-500/20 border-rose-500/30 rounded-xl',
+            alertText: 'text-rose-200 text-sm',
             footer: 'hidden',
-            formFieldAction: 'text-emerald-400 hover:text-emerald-300 text-xs',
-            formResendCodeLink: 'text-emerald-400 hover:text-emerald-300',
-            alert: 'bg-rose-500/20 border-rose-500/30 text-rose-200 rounded-xl',
-            alertText: 'text-rose-200',
         },
         layout: {
             socialButtonsPlacement: 'top' as const,
@@ -180,10 +186,9 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
         }
     };
 
-    // Main login screen
     return (
         <div className="min-h-screen flex items-center justify-center bg-emerald-950 relative overflow-hidden font-sans">
-            {/* Background Decor */}
+            {/* Background */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/20 rounded-full blur-[120px]"></div>
                 <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-emerald-400/10 rounded-full blur-[150px]"></div>
@@ -203,26 +208,10 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
                     {/* Clerk Component */}
                     <div className="clerk-auth-container">
                         {authMode === 'signin' ? (
-                            <SignIn
-                                appearance={clerkAppearance}
-                                routing="hash"
-                            />
+                            <SignIn appearance={clerkAppearance} routing="hash" />
                         ) : (
-                            <SignUp
-                                appearance={clerkAppearance}
-                                routing="hash"
-                            />
+                            <SignUp appearance={clerkAppearance} routing="hash" />
                         )}
-                    </div>
-
-                    {/* Toggle Auth Mode */}
-                    <div className="mt-6 text-center">
-                        <button
-                            onClick={() => setAuthMode(authMode === 'signin' ? 'signup' : 'signin')}
-                            className="text-emerald-400 hover:text-emerald-300 text-[11px] font-bold transition-colors"
-                        >
-                            {authMode === 'signin' ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-                        </button>
                     </div>
 
                     {/* Footer */}
@@ -234,36 +223,200 @@ const ClerkLoginPage: React.FC<Props> = ({ onLogin }) => {
                 </div>
             </div>
 
-            {/* Custom styles for Clerk components */}
+            {/* Aggressive CSS overrides for Clerk */}
             <style>{`
-        .cl-internal-b3fm6y {
-          background: transparent !important;
+        /* Root and card alignment */
+        .clerk-auth-container {
+          width: 100%;
+        }
+        .cl-rootBox {
+          width: 100% !important;
         }
         .cl-card {
+          width: 100% !important;
           background: transparent !important;
           box-shadow: none !important;
+          padding: 0 !important;
         }
-        .cl-socialButtonsBlockButton {
-          background: white !important;
+        .cl-signIn-root, .cl-signUp-root {
+          width: 100% !important;
+          background: transparent !important;
         }
+        
+        /* Main form container alignment */
+        .cl-main {
+          width: 100% !important;
+          gap: 16px !important;
+        }
+        
+        /* Form fields container */
+        .cl-form {
+          width: 100% !important;
+          gap: 16px !important;
+        }
+        
+        /* Form field row - fix label and action alignment */
+        .cl-formFieldRow {
+          width: 100% !important;
+        }
+        .cl-formFieldLabelRow {
+          display: flex !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          width: 100% !important;
+          margin-bottom: 8px !important;
+        }
+        
+        /* Form field inputs */
         .cl-formFieldInput {
+          width: 100% !important;
           background: rgba(255,255,255,0.1) !important;
-          border-color: rgba(255,255,255,0.2) !important;
+          border: 1px solid rgba(255,255,255,0.2) !important;
           color: white !important;
+          border-radius: 16px !important;
+          padding: 16px !important;
+          box-sizing: border-box !important;
         }
         .cl-formFieldInput::placeholder {
           color: rgba(255,255,255,0.4) !important;
         }
-        .cl-footerAction {
-          display: none !important;
+        .cl-formFieldInput:focus {
+          border-color: #10b981 !important;
+          box-shadow: 0 0 0 3px rgba(16,185,129,0.2) !important;
+          outline: none !important;
+        }
+        
+        /* Labels */
+        .cl-formFieldLabel {
+          color: #34d399 !important;
+          font-size: 10px !important;
+          font-weight: 900 !important;
+          text-transform: uppercase !important;
+          letter-spacing: 0.1em !important;
+        }
+        
+        /* Action links (Use phone, etc) */
+        .cl-formFieldAction {
+          color: #34d399 !important;
+          font-size: 11px !important;
+          font-weight: 600 !important;
+        }
+        .cl-formFieldAction:hover {
+          color: #6ee7b7 !important;
+        }
+        
+        /* Social buttons - full width */
+        .cl-socialButtonsBlockButton {
+          width: 100% !important;
+          background: white !important;
+          color: #1f2937 !important;
+          border-radius: 16px !important;
+          padding: 16px !important;
+          font-weight: 600 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          gap: 12px !important;
+        }
+        .cl-socialButtonsBlockButton:hover {
+          background: #f3f4f6 !important;
+        }
+        .cl-socialButtons {
+          width: 100% !important;
+        }
+        
+        /* Divider - full width */
+        .cl-dividerRow {
+          width: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          gap: 16px !important;
+          margin: 16px 0 !important;
         }
         .cl-dividerLine {
+          flex: 1 !important;
+          height: 1px !important;
           background: rgba(255,255,255,0.2) !important;
         }
         .cl-dividerText {
           color: rgba(255,255,255,0.5) !important;
+          background: transparent !important;
+          font-size: 12px !important;
+          padding: 0 !important;
+        }
+        
+        /* Primary button - full width */
+        .cl-formButtonPrimary {
+          width: 100% !important;
+          background: #10b981 !important;
+          border-radius: 16px !important;
+          padding: 16px !important;
+          font-weight: 700 !important;
+          text-transform: none !important;
+          margin-top: 8px !important;
+        }
+        .cl-formButtonPrimary:hover {
+          background: #34d399 !important;
+        }
+        
+        /* Footer - hide Clerk's footer completely */
+        .cl-footer, .cl-footerAction, .cl-footerActionText, .cl-footerActionLink {
+          display: none !important;
+        }
+        
+        /* OTP input */
+        .cl-otpCodeFieldInput {
+          background: rgba(255,255,255,0.1) !important;
+          border-color: rgba(255,255,255,0.2) !important;
+          color: white !important;
+        }
+        
+        /* Identity preview */
+        .cl-identityPreview {
+          width: 100% !important;
+          background: rgba(255,255,255,0.1) !important;
+          border-color: rgba(255,255,255,0.2) !important;
+          border-radius: 16px !important;
+          padding: 16px !important;
+        }
+        .cl-identityPreviewText {
+          color: white !important;
+        }
+        .cl-identityPreviewEditButton {
+          color: #34d399 !important;
+        }
+        
+        /* Header within forms - hide */
+        .cl-headerTitle, .cl-headerSubtitle, .cl-header {
+          display: none !important;
+        }
+        
+        /* Alert/Error messages */
+        .cl-alert {
+          width: 100% !important;
+          background: rgba(239,68,68,0.2) !important;
+          border-color: rgba(239,68,68,0.3) !important;
+          border-radius: 12px !important;
+        }
+        .cl-alertText {
+          color: #fca5a5 !important;
+        }
+        
+        /* Internal backgrounds - catch all */
+        .cl-internal-b3fm6y, .cl-internal-1dauvt6, [class*="cl-internal"] {
+          background: transparent !important;
+        }
+        
+        /* Alternative methods button */
+        .cl-alternativeMethods {
+          width: 100% !important;
+        }
+        .cl-alternativeMethodsBlockButton {
+          color: #34d399 !important;
+          font-size: 12px !important;
         }
       `}</style>
+
         </div>
     );
 };
