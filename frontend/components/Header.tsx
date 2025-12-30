@@ -69,7 +69,7 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
             <div className="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] shadow-md group-hover:scale-110 transition-transform">
               <i className="fas fa-user-check"></i>
             </div>
-            <p className="hidden md:block text-[11px] font-bold text-slate-700 tracking-tight">+91 {user.phone.slice(-10)}</p>
+            <p className="hidden md:block text-[11px] font-bold text-slate-700 tracking-tight">{user.name}</p>
           </div>
         </div>
       </div>

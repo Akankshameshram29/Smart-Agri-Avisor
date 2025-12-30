@@ -333,7 +333,7 @@ const App: React.FC = () => {
 
                   <div className="space-y-6 mb-10">
                     <div className="flex justify-between items-end text-[10px] font-black text-emerald-500/60 uppercase tracking-widest">
-                      <span>User Profile Progress</span>
+                      <span>{user.name}'s Profile</span>
                       <span>{trainingCount}/10 Reports</span>
                     </div>
                     <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
@@ -344,8 +344,8 @@ const App: React.FC = () => {
                     </div>
                     <p className="text-emerald-100/40 text-[11px] font-medium leading-relaxed">
                       {trainingCount >= 10
-                        ? "AI recognizes your regional patterns for account +91 " + user.phone.slice(-4)
-                        : `Generate ${10 - trainingCount} more reports to enable localized adaptive reasoning.`}
+                        ? `AI recognizes ${user.name}'s regional patterns for account +91 ` + user.phone.slice(-4)
+                        : `Generate ${10 - trainingCount} more reports to personalize ${user.name}'s recommendations.`}
                     </p>
                   </div>
 
@@ -515,7 +515,7 @@ const App: React.FC = () => {
                 </div>
                 <h2 className="text-4xl md:text-5xl font-heading text-slate-800">My Mandi Reports</h2>
                 <div className="flex flex-col gap-1.5">
-                  <p className="text-sm font-bold text-slate-500">Reports isolated for +91 {user.phone}</p>
+                  <p className="text-sm font-bold text-slate-500">Reports saved for {user.name}</p>
                   <p className="text-xs text-slate-400 max-w-xl italic leading-relaxed">Your stored agricultural intelligence and historical market comparisons from active sessions, protected for your eyes only.</p>
                 </div>
               </div>
@@ -563,7 +563,14 @@ const App: React.FC = () => {
         {activeTab === 'chat' && (
           <AgriChat
             user={user}
-            currentContext={analysis ? { location: analysis.location, soil: analysis.soil } : undefined}
+            currentContext={analysis ? {
+              location: analysis.location,
+              soil: analysis.soil,
+              recommendedCrops: analysis.crops?.map(c => c.name) || [],
+              exploredCrops: analysis.crop_details ? Object.keys(analysis.crop_details) : [],
+              lastSearchTimestamp: analysis.timestamp
+            } : undefined}
+            userHistory={history}
             messages={chatMessages}
             setMessages={setChatMessages}
             loading={chatLoading}
@@ -578,6 +585,7 @@ const App: React.FC = () => {
         onClose={() => setIsProfileOpen(false)}
         user={user}
         onLogout={handleLogout}
+        onUserUpdate={(updatedUser) => setUser(updatedUser)}
       />
 
       {(loading || detailLoading) && (

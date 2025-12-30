@@ -8,11 +8,15 @@ interface Props {
   onClose: () => void;
   user: User;
   onLogout: () => void;
+  onUserUpdate?: (user: User) => void;
 }
 
-const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
+const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout, onUserUpdate }) => {
   const [history, setHistory] = useState<FarmerRecord[]>([]);
   const [stats, setStats] = useState({ size: '0 KB', count: 0 });
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [newName, setNewName] = useState(user.name);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (isOpen && user?.phone) {
@@ -24,8 +28,31 @@ const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
           count: data.length
         });
       });
+      setNewName(user.name);
     }
   }, [isOpen, user]);
+
+  const handleSaveName = async () => {
+    if (!newName.trim() || newName.trim().length < 2) {
+      alert('Please enter a valid name (at least 2 characters)');
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await dbService.updateUserName(user.phone, newName.trim());
+      if (result.success && result.user && onUserUpdate) {
+        onUserUpdate(result.user);
+        // Update localStorage session
+        localStorage.setItem('smart_agri_advisor_session', JSON.stringify(result.user));
+      }
+      setIsEditingName(false);
+    } catch (err) {
+      alert('Failed to update name. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -40,7 +67,41 @@ const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
               <i className="fas fa-user-circle"></i>
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user.name}</h2>
+              {isEditingName ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="text-lg font-black text-slate-900 bg-white border border-emerald-200 rounded-xl px-3 py-1 w-40 focus:outline-none focus:border-emerald-500"
+                    autoFocus
+                  />
+                  <button
+                    onClick={handleSaveName}
+                    disabled={saving}
+                    className="w-8 h-8 bg-emerald-500 text-white rounded-xl flex items-center justify-center hover:bg-emerald-600 transition-colors"
+                  >
+                    {saving ? <i className="fas fa-spinner animate-spin"></i> : <i className="fas fa-check"></i>}
+                  </button>
+                  <button
+                    onClick={() => { setIsEditingName(false); setNewName(user.name); }}
+                    className="w-8 h-8 bg-slate-200 text-slate-500 rounded-xl flex items-center justify-center hover:bg-slate-300 transition-colors"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user.name}</h2>
+                  <button
+                    onClick={() => setIsEditingName(true)}
+                    className="w-6 h-6 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center hover:bg-emerald-200 transition-colors"
+                    title="Edit Name"
+                  >
+                    <i className="fas fa-pen text-[10px]"></i>
+                  </button>
+                </div>
+              )}
               <p className="text-xs font-bold text-emerald-600">+91 {user.phone}</p>
             </div>
           </div>
@@ -65,7 +126,7 @@ const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
           {/* Data Management Section */}
           <div className="space-y-6">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">Neural Vault</h3>
+              <h3 className="text-sm font-black text-slate-400 uppercase tracking-widest">Data Vault</h3>
               <span className="text-[10px] font-bold text-slate-300 uppercase">Per-Account Storage</span>
             </div>
 
@@ -128,7 +189,7 @@ const ProfilePanel: React.FC<Props> = ({ isOpen, onClose, user, onLogout }) => {
 
         <div className="p-8 bg-slate-50 text-center">
           <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.4em] mb-1">Smart Agri Advisor Intelligence</p>
-          <p className="text-[9px] text-slate-400">Data localized for +91 {user.phone}</p>
+          <p className="text-[9px] text-slate-400">Data localized for {user.name}</p>
         </div>
       </div>
     </div>

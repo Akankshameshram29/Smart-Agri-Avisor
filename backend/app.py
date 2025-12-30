@@ -94,6 +94,29 @@ def logout():
     return {"success": True}
 
 
+class UpdateNameRequest(BaseModel):
+    phone: str
+    name: str
+
+
+@app.post("/api/auth/update-name")
+def update_name(request: UpdateNameRequest, db: Session = Depends(get_db)):
+    """Update user's display name."""
+    phone = request.phone.strip()
+    name = request.name.strip()
+    
+    if not phone or len(phone) < 10:
+        raise HTTPException(status_code=400, detail="Invalid phone number")
+    
+    if not name or len(name) < 2:
+        raise HTTPException(status_code=400, detail="Name must be at least 2 characters")
+    
+    user = db_service.update_user_name(db, phone, name)
+    if user:
+        return {"success": True, "user": user.to_dict()}
+    raise HTTPException(status_code=404, detail="User not found")
+
+
 # ==================== ANALYSIS ROUTES ====================
 
 @app.post("/api/analysis/run")

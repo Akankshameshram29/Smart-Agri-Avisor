@@ -89,6 +89,25 @@ class DatabaseService {
       // Silently fail
     }
   }
+
+  /**
+   * Update user's display name
+   */
+  async updateUserName(phone: string, name: string): Promise<any> {
+    const response = await fetch(`${API_BASE_URL}/auth/update-name`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ phone, name }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update name');
+    }
+
+    return await response.json();
+  }
 }
 
 export const dbService = new DatabaseService();

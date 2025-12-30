@@ -7,11 +7,25 @@ class DatabaseService:
     """Database operations for Smart Agri Advisor."""
     
     def get_or_create_user(self, db, phone: str, name: str = "Farmer") -> User:
-        """Get existing user or create new one."""
+        """Get existing user or create new one. Updates name if user exists and new name is provided."""
         user = db.query(User).filter(User.phone == phone).first()
         if not user:
             user = User(phone=phone, name=name, joined_at=datetime.utcnow())
             db.add(user)
+            db.commit()
+            db.refresh(user)
+        elif name and name != "Farmer" and user.name != name:
+            # Update user's name if a new, non-default name is provided
+            user.name = name
+            db.commit()
+            db.refresh(user)
+        return user
+    
+    def update_user_name(self, db, phone: str, new_name: str) -> User:
+        """Update an existing user's name."""
+        user = db.query(User).filter(User.phone == phone).first()
+        if user and new_name and new_name.strip():
+            user.name = new_name.strip()
             db.commit()
             db.refresh(user)
         return user

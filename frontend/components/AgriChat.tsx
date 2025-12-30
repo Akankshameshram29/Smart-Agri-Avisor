@@ -11,6 +11,7 @@ interface Message {
 interface Props {
     user: User;
     currentContext?: any;
+    userHistory?: any[];
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     loading: boolean;
@@ -67,7 +68,7 @@ const renderMessage = (text: string) => {
     );
 };
 
-const AgriChat: React.FC<Props> = ({ user, currentContext, messages, setMessages, loading, setLoading }) => {
+const AgriChat: React.FC<Props> = ({ user, currentContext, userHistory, messages, setMessages, loading, setLoading }) => {
     const [input, setInput] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -91,7 +92,26 @@ const AgriChat: React.FC<Props> = ({ user, currentContext, messages, setMessages
 
         try {
             const history = messages.slice(-10);
-            const answer = await geminiService.askQuestion(user.phone, userMsg, currentContext, history);
+
+            // Build comprehensive user activity context
+            const activitySummary = userHistory?.slice(0, 5).map(record => ({
+                district: record.district,
+                date: record.timestamp,
+                crops: record.data?.crops?.map((c: any) => c.name) || [],
+                exploredCrops: record.data?.crop_details ? Object.keys(record.data.crop_details) : []
+            })) || [];
+
+            const enrichedContext = {
+                ...currentContext,
+                userName: user.name,
+                userPhone: user.phone,
+                totalSearches: userHistory?.length || 0,
+                recentActivitySummary: activitySummary,
+                currentSessionCrops: currentContext?.recommendedCrops || [],
+                currentSessionExploredCrops: currentContext?.exploredCrops || []
+            };
+
+            const answer = await geminiService.askQuestion(user.phone, userMsg, enrichedContext, history);
 
             // Start simulated streaming
             setLoading(false);

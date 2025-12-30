@@ -414,12 +414,60 @@ class GeminiService:
     def ask_question(self, question: str, history: list = None, context: dict = None) -> str:
         """Answer agricultural questions based on context and conversation history."""
         
-        system_prompt = """You are an Expert Agri-Consultant for Indian farmers. 
-        Your primary goal is to provide empathetic, practical, and scientifically sound agricultural advice. 
+        # Extract user information from context
+        user_name = context.get('userName', '') if context else ''
+        total_searches = context.get('totalSearches', 0) if context else 0
+        current_crops = context.get('currentSessionCrops', []) if context else []
+        explored_crops = context.get('currentSessionExploredCrops', []) if context else []
+        activity_summary = context.get('recentActivitySummary', []) if context else []
+        location = context.get('location', {}) if context else {}
+        soil = context.get('soil', {}) if context else {}
+        
+        # Build activity history description
+        activity_description = ""
+        if activity_summary:
+            activity_lines = []
+            for i, activity in enumerate(activity_summary[:3]):
+                crops_str = ", ".join(activity.get('crops', [])[:5])
+                explored_str = ", ".join(activity.get('exploredCrops', []))
+                date_str = activity.get('date', 'Recently')[:10] if activity.get('date') else 'Recently'
+                district_str = activity.get('district', 'Unknown')
+                line = f"  {i+1}. On {date_str} in {district_str}: Recommended crops were [{crops_str}]"
+                if explored_str:
+                    line += f". User explored details for: [{explored_str}]"
+                activity_lines.append(line)
+            activity_description = "\n".join(activity_lines)
+        
+        # Build comprehensive identity and context block
+        identity_block = f"""
+USER IDENTITY & ACTIVITY PROFILE:
+- Name: {user_name if user_name else 'Unknown'}
+- Total Lifetime Searches: {total_searches}
+- Current Session Location: {location.get('district', 'Not set')}, {location.get('state', '')}
+- Current Soil Data: N={soil.get('n', 'N/A')}, P={soil.get('p', 'N/A')}, K={soil.get('k', 'N/A')}, pH={soil.get('ph', 'N/A')}
+- Crops Recommended This Session: {', '.join(current_crops) if current_crops else 'None yet'}
+- Crops User Explored in Detail: {', '.join(explored_crops) if explored_crops else 'None yet'}
+
+RECENT SEARCH HISTORY:
+{activity_description if activity_description else '  No previous searches recorded.'}
+
+YOU HAVE FULL ACCESS TO THIS USER'S DATA. If they ask "maine kya search kiya?", "mera naam kya hai?", "kaunsi fasal dekhi maine?", etc., YOU MUST answer from the data above. Do NOT say you don't know.
+""" if user_name or activity_summary else ""
+        
+        system_prompt = f"""You are an Expert Agri-Consultant for Indian farmers with FULL MEMORY of user interactions.
+        Your primary goal is to provide empathetic, practical, and scientifically sound agricultural advice.
+        
+        {identity_block}
+        
+        ### MEMORY-AWARE RESPONSES ###
+        - You KNOW the user's name, their search history, crops they explored, and their soil/location data.
+        - When user asks about their history, past searches, or their name, REFER TO THE DATA ABOVE.
+        - Proactively mention their past searches if relevant to their current question.
+        - Personalize advice based on their explored crops and location.
         
         EMPATHY & FOCUS:
-        - If the user expresses a problem (loss, pests, failure), ALWAYS acknowledge it first with empathy (e.g., "I'm sorry to hear about your loss...").
-        - PRIORITIZE the user's specific question over general context. Do not dump soil data (N, P, K) unless the user asks about fertilization or soil.
+        - If the user expresses a problem (loss, pests, failure), ALWAYS acknowledge it first with empathy.
+        - PRIORITIZE the user's specific question over general context.
         - Be a problem-solver, not just a data reporter.
         
         ### MANDATORY SCRIPT RULE (CRITICAL) ###
@@ -428,18 +476,11 @@ class GeminiService:
         - Match Hinglish with Hinglish. Example: "Hi" -> "Hello", "Kaise ho" -> "Main theek hoon".
         - BAN ON REPETITIVE GREETINGS: Do not start with "Namaste" or "Kisan bhai" every time. Be direct.
         
-        EMPATHY & FOCUS:
-        - If the user expresses a problem (loss, pests), acknowledge it first with empathy.
-        - Be a problem-solver, not just a data reporter.
-        
-        If local context is provided, make your advice specific to their climate.
-        
         STRICT FORMATTING:
         - Use **bold** only for highlighting specific critical values or terms inside sentences.
         - DO NOT use bold markers (**) for titles or headers.
         - Use Bullet points (•) for steps.
-        - PRICING: ALWAYS use ₹/kg format for crops. For equipment, provide the absolute price in ₹ from platforms like Amazon/Flipkart if known.
-        - MARKETPLACE: If the user asks about buying equipment, seeds, or tools, provide specific product names, estimated prices, and mention where they can buy it (e.g., "Available on AgriBegri or Amazon").
+        - PRICING: ALWAYS use ₹/kg format for crops.
         - Keep output clean and free of unnecessary markdown symbols. """
         
         contents = []
