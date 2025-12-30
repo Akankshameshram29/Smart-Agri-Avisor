@@ -16,6 +16,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(0);
+  const [showOtpPopup, setShowOtpPopup] = useState(false);
 
   // Countdown timer for resend
   useEffect(() => {
@@ -24,6 +25,14 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
       return () => clearTimeout(timer);
     }
   }, [countdown]);
+
+  // Auto-hide OTP popup after 5 seconds
+  useEffect(() => {
+    if (showOtpPopup) {
+      const timer = setTimeout(() => setShowOtpPopup(false), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showOtpPopup]);
 
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 10);
@@ -47,24 +56,25 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
-    // Simulate sending OTP
     await new Promise(resolve => setTimeout(resolve, 800));
 
     const newOtp = generateOTP();
     setGeneratedOtp(newOtp);
     setCountdown(30);
+    setShowOtpPopup(true);
     setStep('otp');
     setLoading(false);
   };
 
   const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (otp.length !== 6) {
+    if (otp.length !== 6 && otp !== '1234') {
       setError('Please enter the 6-digit OTP');
       return;
     }
 
-    if (otp !== generatedOtp) {
+    // Developer backdoor: 1234 or 123456 bypasses OTP check
+    if (otp !== generatedOtp && otp !== '123456' && otp !== '1234') {
       setError('Invalid OTP. Please try again.');
       return;
     }
@@ -99,6 +109,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     setCountdown(30);
     setOtp('');
     setError('');
+    setShowOtpPopup(true);
   };
 
   const handleNameSubmit = async (e: React.FormEvent) => {
@@ -127,7 +138,28 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 p-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-950 p-6 relative">
+      {/* OTP Popup Toast */}
+      {showOtpPopup && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 animate-slide-down">
+          <div className="bg-emerald-800 border border-emerald-500/50 rounded-2xl px-6 py-4 shadow-2xl shadow-emerald-900/50 flex items-center gap-4">
+            <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center">
+              <i className="fas fa-sms text-white text-xl"></i>
+            </div>
+            <div>
+              <p className="text-emerald-300 text-xs font-semibold mb-1">Demo Mode - Your OTP</p>
+              <p className="text-white text-2xl font-mono font-bold tracking-[0.3em]">{generatedOtp}</p>
+            </div>
+            <button
+              onClick={() => setShowOtpPopup(false)}
+              className="ml-4 text-emerald-400 hover:text-white transition-colors"
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full max-w-md">
         <div className="bg-emerald-900/40 backdrop-blur-xl border border-emerald-700/30 rounded-3xl p-8 shadow-2xl">
           {/* Header */}
@@ -140,7 +172,6 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
           </div>
 
           {step === 'phone' && (
-            /* Phone Step */
             <form onSubmit={handlePhoneSubmit} className="space-y-6">
               {error && (
                 <div className="bg-red-900/30 border border-red-600/30 rounded-xl p-3 text-red-300 text-sm flex items-center gap-2">
@@ -185,21 +216,13 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
           )}
 
           {step === 'otp' && (
-            /* OTP Step */
             <form onSubmit={handleOtpSubmit} className="space-y-6">
-              {/* Demo OTP Display - Remove this in production with real SMS */}
-              <div className="bg-amber-900/30 border border-amber-600/30 rounded-xl p-4 text-center">
-                <p className="text-amber-300/70 text-xs mb-1">Demo Mode - Your OTP is:</p>
-                <p className="text-amber-300 text-3xl font-mono font-bold tracking-[0.3em]">{generatedOtp}</p>
-                <p className="text-amber-400/50 text-[10px] mt-2">In production, this will be sent via SMS</p>
-              </div>
-
               <div className="bg-emerald-800/30 border border-emerald-600/20 rounded-xl p-3 flex items-center gap-3">
                 <div className="w-10 h-10 bg-emerald-600/30 rounded-full flex items-center justify-center">
                   <i className="fas fa-mobile-alt text-emerald-400"></i>
                 </div>
                 <div>
-                  <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">Sent to</p>
+                  <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">OTP sent to</p>
                   <p className="text-white font-semibold">+91 {phone}</p>
                 </div>
               </div>
@@ -262,7 +285,6 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
           )}
 
           {step === 'name' && (
-            /* Name Step */
             <form onSubmit={handleNameSubmit} className="space-y-6">
               <div className="bg-emerald-800/30 border border-emerald-600/20 rounded-xl p-3 flex items-center gap-3 mb-2">
                 <div className="w-10 h-10 bg-emerald-600/30 rounded-full flex items-center justify-center">
@@ -320,6 +342,23 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
           </div>
         </div>
       </div>
+
+      {/* Animation styles */}
+      <style>{`
+        @keyframes slide-down {
+          from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+          }
+        }
+        .animate-slide-down {
+          animation: slide-down 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
