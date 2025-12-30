@@ -6,7 +6,7 @@ import CropCard from './components/CropCard';
 import CropDetails from './components/CropDetails';
 import Resources from './components/Resources';
 import ProfilePanel from './components/DatabaseManager';
-import ClerkLoginPage from './components/ClerkLoginPage';
+import LoginPage from './components/LoginPage';
 import { agentService } from './services/agentService';
 import { dbService } from './services/dbService';
 import AgriChat from './components/AgriChat';
@@ -298,7 +298,7 @@ const App: React.FC = () => {
   };
 
   if (!user) {
-    return <ClerkLoginPage onLogin={handleLogin} />;
+    return <LoginPage onLogin={handleLogin} />;
   }
 
   return (
