@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User } from '../types';
 import { dbService } from '../services/dbService';
 
@@ -10,15 +10,30 @@ interface Props {
 const LoginPage: React.FC<Props> = ({ onLogin }) => {
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
-  const [step, setStep] = useState<'phone' | 'name'>('phone');
+  const [otp, setOtp] = useState('');
+  const [generatedOtp, setGeneratedOtp] = useState('');
+  const [step, setStep] = useState<'phone' | 'otp' | 'name'>('phone');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [countdown, setCountdown] = useState(0);
+
+  // Countdown timer for resend
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
 
   const formatPhone = (value: string) => {
     const digits = value.replace(/\D/g, '').slice(0, 10);
     if (digits.length <= 3) return digits;
     if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
     return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
+  };
+
+  const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
   };
 
   const handlePhoneSubmit = async (e: React.FormEvent) => {
@@ -32,14 +47,39 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     setError('');
     setLoading(true);
 
+    // Simulate sending OTP
+    await new Promise(resolve => setTimeout(resolve, 800));
+
+    const newOtp = generateOTP();
+    setGeneratedOtp(newOtp);
+    setCountdown(30);
+    setStep('otp');
+    setLoading(false);
+  };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (otp.length !== 6) {
+      setError('Please enter the 6-digit OTP');
+      return;
+    }
+
+    if (otp !== generatedOtp) {
+      setError('Invalid OTP. Please try again.');
+      return;
+    }
+
+    setError('');
+    setLoading(true);
+
     try {
+      const cleanPhone = phone.replace(/\D/g, '');
       const result = await dbService.login(cleanPhone, 'User');
+
       if (result.success && result.user) {
         if (result.user.name && result.user.name !== 'User' && result.user.name !== 'Farmer') {
-          // Returning user with name already set
           onLogin(result.user);
         } else {
-          // New user or user without proper name - ask for name
           setStep('name');
         }
       } else {
@@ -50,6 +90,15 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleResendOtp = () => {
+    if (countdown > 0) return;
+    const newOtp = generateOTP();
+    setGeneratedOtp(newOtp);
+    setCountdown(30);
+    setOtp('');
+    setError('');
   };
 
   const handleNameSubmit = async (e: React.FormEvent) => {
@@ -90,7 +139,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
             <p className="text-emerald-300/70 text-sm">Your AI Krishi Expert</p>
           </div>
 
-          {step === 'phone' ? (
+          {step === 'phone' && (
             /* Phone Step */
             <form onSubmit={handlePhoneSubmit} className="space-y-6">
               {error && (
@@ -115,7 +164,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
                     className="w-full bg-emerald-800/40 border border-emerald-600/30 rounded-xl py-4 pl-14 pr-4 text-white placeholder:text-emerald-500/40 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 text-lg tracking-wider"
                   />
                 </div>
-                <p className="text-emerald-500/50 text-xs mt-2 ml-1">Enter your 10-digit mobile number</p>
+                <p className="text-emerald-500/50 text-xs mt-2 ml-1">We'll send you a verification code</p>
               </div>
 
               <button
@@ -127,17 +176,92 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
                   <i className="fas fa-circle-notch animate-spin"></i>
                 ) : (
                   <>
-                    Continue
+                    Send OTP
                     <i className="fas fa-arrow-right"></i>
                   </>
                 )}
               </button>
-
-              <p className="text-center text-emerald-500/40 text-xs">
-                New users will be registered automatically
-              </p>
             </form>
-          ) : (
+          )}
+
+          {step === 'otp' && (
+            /* OTP Step */
+            <form onSubmit={handleOtpSubmit} className="space-y-6">
+              {/* Demo OTP Display - Remove this in production with real SMS */}
+              <div className="bg-amber-900/30 border border-amber-600/30 rounded-xl p-4 text-center">
+                <p className="text-amber-300/70 text-xs mb-1">Demo Mode - Your OTP is:</p>
+                <p className="text-amber-300 text-3xl font-mono font-bold tracking-[0.3em]">{generatedOtp}</p>
+                <p className="text-amber-400/50 text-[10px] mt-2">In production, this will be sent via SMS</p>
+              </div>
+
+              <div className="bg-emerald-800/30 border border-emerald-600/20 rounded-xl p-3 flex items-center gap-3">
+                <div className="w-10 h-10 bg-emerald-600/30 rounded-full flex items-center justify-center">
+                  <i className="fas fa-mobile-alt text-emerald-400"></i>
+                </div>
+                <div>
+                  <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">Sent to</p>
+                  <p className="text-white font-semibold">+91 {phone}</p>
+                </div>
+              </div>
+
+              {error && (
+                <div className="bg-red-900/30 border border-red-600/30 rounded-xl p-3 text-red-300 text-sm flex items-center gap-2">
+                  <i className="fas fa-exclamation-circle"></i>
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <label className="block text-emerald-400 text-[10px] font-bold uppercase tracking-wider mb-2">
+                  Enter OTP
+                </label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                  placeholder="000000"
+                  autoFocus
+                  maxLength={6}
+                  className="w-full bg-emerald-800/40 border border-emerald-600/30 rounded-xl py-4 px-4 text-white text-center text-2xl font-mono tracking-[0.5em] placeholder:text-emerald-500/40 placeholder:tracking-[0.5em] focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading || otp.length !== 6}
+                className="w-full bg-emerald-500 hover:bg-emerald-400 text-white py-4 rounded-xl font-bold text-sm transition-all shadow-lg shadow-emerald-900/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <i className="fas fa-circle-notch animate-spin"></i>
+                ) : (
+                  <>
+                    Verify OTP
+                    <i className="fas fa-check"></i>
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center justify-between text-sm">
+                <button
+                  type="button"
+                  onClick={() => { setStep('phone'); setError(''); setOtp(''); }}
+                  className="text-emerald-400 hover:text-emerald-300 transition-colors"
+                >
+                  ← Change number
+                </button>
+                <button
+                  type="button"
+                  onClick={handleResendOtp}
+                  disabled={countdown > 0}
+                  className={`transition-colors ${countdown > 0 ? 'text-emerald-600/50 cursor-not-allowed' : 'text-emerald-400 hover:text-emerald-300'}`}
+                >
+                  {countdown > 0 ? `Resend in ${countdown}s` : 'Resend OTP'}
+                </button>
+              </div>
+            </form>
+          )}
+
+          {step === 'name' && (
             /* Name Step */
             <form onSubmit={handleNameSubmit} className="space-y-6">
               <div className="bg-emerald-800/30 border border-emerald-600/20 rounded-xl p-3 flex items-center gap-3 mb-2">
@@ -145,7 +269,7 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
                   <i className="fas fa-check text-emerald-400"></i>
                 </div>
                 <div>
-                  <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">Mobile Verified</p>
+                  <p className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">Verified</p>
                   <p className="text-white font-semibold">+91 {phone}</p>
                 </div>
               </div>
@@ -184,14 +308,6 @@ const LoginPage: React.FC<Props> = ({ onLogin }) => {
                     <i className="fas fa-arrow-right"></i>
                   </>
                 )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => { setStep('phone'); setError(''); }}
-                className="w-full text-emerald-400 hover:text-emerald-300 py-2 text-sm transition-colors"
-              >
-                ← Change number
               </button>
             </form>
           )}
