@@ -5,26 +5,11 @@ from datetime import datetime
 import json
 import os
 
-# Database setup - supports both SQLite (local) and PostgreSQL (production)
+# Database setup
+# Using a consistent path in the backend directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE_URL = os.environ.get('DATABASE_URL', f'sqlite:///{os.path.join(BASE_DIR, "smart_agri_advisor.db")}')
-
-# Fix for Render/Heroku PostgreSQL URLs (they use 'postgres://' but SQLAlchemy needs 'postgresql://')
-if DATABASE_URL.startswith('postgres://'):
-    DATABASE_URL = DATABASE_URL.replace('postgres://', 'postgresql://', 1)
-
-# Configure engine based on database type
-if DATABASE_URL.startswith('sqlite'):
-    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-else:
-    # PostgreSQL with connection pooling for production
-    engine = create_engine(
-        DATABASE_URL,
-        pool_size=5,
-        max_overflow=10,
-        pool_pre_ping=True
-    )
-
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

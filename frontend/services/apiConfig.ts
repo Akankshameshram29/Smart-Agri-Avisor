@@ -2,8 +2,8 @@
  * API Configuration for FastAPI Backend
  */
 
-// Backend API base URL - uses environment variable in production
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
+// Backend API base URL
+export const API_BASE_URL = 'http://localhost:5000/api';
 
 /**
  * Helper function for making API requests
