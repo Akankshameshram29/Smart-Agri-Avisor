@@ -1,68 +1,176 @@
 # 🌾 Smart Agri Advisor
-### **Predictive Intelligence for the Modern Indian Farmer**
+### **AI-Powered Crop Intelligence for Indian Farmers**
 
-[![Framework - React 18](https://img.shields.io/badge/Frontend-React_18-vibrant?style=for-the-badge&logo=react)](https://react.dev/)
-[![Core - Gemini 2.5](https://img.shields.io/badge/AI_Core-Gemini_2.5_Flash-emerald?style=for-the-badge&logo=google-gemini)](https://deepmind.google/technologies/gemini/)
-[![Verified - Live Grounding](https://img.shields.io/badge/Verification-Live_Mandi_Grounding-blue?style=for-the-badge&logo=google-search)](https://serper.dev/)
-
----
-
-## 🌟 The Vision
-**Smart Agri Advisor** is an enterprise-grade ecosystem built to empower the backbone of India. We’ve replaced outdated, static farming data with a high-fidelity, live-grounded intelligence suite. It's more than an advisor—it's a digital guardian that predicts market shifts, prevents crop failure, and speaks with cultural empathy.
+[![Framework - React 19](https://img.shields.io/badge/Frontend-React_19-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![Backend - FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![AI Core - Gemini 2.5](https://img.shields.io/badge/AI_Core-Gemini_2.5_Flash-4285F4?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
+[![Database - SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite)](https://www.sqlite.org/)
+[![Live Data - Serper](https://img.shields.io/badge/Grounding-Serper_API-FF6B6B?style=for-the-badge)](https://serper.dev/)
 
 ---
 
-## 🚀 Product Superpowers
+## 🌟 What is Smart Agri Advisor?
 
-### 🌍 **Living Market Intelligence**
-Unlike standard AI that relies on outdated training data, our system uses **Real-Time Web Grounding**. Every Mandi price and strategy is cross-verified via `AgMarknet` and `e-NAM` portals in milliseconds. When you see a price, it's not a prediction—it's the current reality.
+**Smart Agri Advisor** is an enterprise-grade agricultural intelligence platform that empowers Indian farmers with:
 
-### 🛡️ **Uninterruptible Global Reliability**
-Built for zero-failure performance. Our proprietary **Autonomous Failover Engine** monitors API health in real-time, seamlessly rotating through a pool of high-capacity Gemini 2.5 Flash keys. The result? 100% uptime for farmers, even during peak seasonal analysis.
-
-### 🗣️ **Native Linguistic Empathy**
-We've perfected the human-AI interface for rural India. Our **Contextual Script Enforcement** detects your preferred language script (Hinglish/Latin vs. Devanagari) and locks the response script to match perfectly. No "language leakage"—just clear, natural conversation.
-
-### 📊 **Predictive Market Vision**
-Prepare for the future, not just the next harvest. Our **Forecast Dashboard** provides deep-dive 2026 projections with **Bearish Risk Safety-Bounds**. We help you visualize volatility so you can make profitable decisions with a safety net.
+- 🗺️ **Map-Based Location Analysis** - Tap anywhere on India to get district-specific crop recommendations
+- 🌱 **5-10 Crop Recommendations** - AI-powered suggestions based on soil NPK, pH, and market demand
+- 📈 **Live Mandi Prices** - Real-time price grounding via web search (not outdated training data)
+- 📊 **Price Forecasting** - 4-month historical + 4-month future price predictions with charts
+- 💬 **Neural Memory Chatbot** - AI that remembers your name, history, and current context
+- 📁 **Persistent Reports** - All analyses saved to personal vault with SQLite
 
 ---
 
-## 🛠️ The Technology Edge
+## 🚀 Key Features
 
-- **Glassmorphic Interface**: Custom-engineered React 18 UI with frosted-glass depth for a premium mobile-first experience.
-- **Neural Persistence**: Every strategy, chat, and report is architected into a centralized SQLite vault, ensuring your history is never lost.
-- **Precision Mapping**: High-fidelity Leaflet geo-fencing for district-accurate climate and soil intelligence.
+| Feature | Description |
+|---------|-------------|
+| **Live Grounding** | Every Mandi price is verified via Serper web search - no hallucination |
+| **Zero Downtime** | Automatic API key rotation (3 keys) ensures 100% uptime |
+| **Personalized AI** | Chatbot knows user name, past searches, and current screen context |
+| **District Accuracy** | OpenStreetMap reverse geocoding for precise location detection |
+| **Dynamic Dates** | Price charts show exact dates (today's date, not generic months) |
+| **Edit Profile** | Users can update their display name anytime |
 
 ---
 
-## ⚡ Setup Architecture
+## 🛠️ Technology Stack
 
-### **Core Backend**
+### Backend
+- **FastAPI** - High-performance Python web framework
+- **SQLAlchemy** - ORM for SQLite database
+- **Google Gemini 2.5 Flash** - AI model for recommendations
+- **Serper API** - Live web search for price grounding
+- **OpenStreetMap Nominatim** - Free reverse geocoding
+
+### Frontend
+- **React 19** - Modern UI framework
+- **Vite** - Lightning-fast build tool
+- **Recharts** - Beautiful area charts for price visualization
+- **Leaflet** - Interactive India map
+- **TailwindCSS** - Utility-first styling
+
+---
+
+## ⚡ Quick Start
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/Aadya-Madankar/Smart-Agri-Avisor.git
+cd Smart-Agri-Avisor
+```
+
+### 2. Backend Setup
 ```bash
 cd backend
 python -m venv venv
-.\venv\Scripts\activate # Windows
+.\venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
 pip install -r requirements.txt
-python app.py
 ```
 
-### **Premium Frontend**
+Create `.env` file:
+```env
+GEMINI_KEYS=your_key_1,your_key_2,your_key_3
+API_KEY=your_primary_key
+SERPER_API_KEY=your_serper_key
+SECRET_KEY=your_secret_key
+DATABASE_URL=
+```
+
+Start the server:
+```bash
+python app.py
+```
+Server runs at: `http://localhost:5000`
+
+### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+App runs at: `http://localhost:3000`
 
 ---
 
-## 📄 High-Fidelity Documentation
-For the full interactive experience, including architecture blueprints and developer presentation scripts, explore our official documentation:
+## 📁 Project Structure
 
-### [👉 ACCESS INTERACTIVE DOCUMENTATION 👈](./PROJECT_DOCUMENTATION.html)
+```
+Smart-Agri-Avisor/
+├── backend/
+│   ├── app.py              # FastAPI routes
+│   ├── models.py           # Database schema
+│   ├── services/
+│   │   ├── agent_service.py    # Analysis orchestration
+│   │   ├── gemini_service.py   # AI integration
+│   │   └── db_service.py       # Database operations
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── App.tsx             # Main application
+│   ├── components/
+│   │   ├── LoginPage.tsx       # Authentication
+│   │   ├── CropCard.tsx        # Recommendation cards
+│   │   ├── CropDetails.tsx     # Detailed analysis modal
+│   │   ├── AgriChat.tsx        # AI chatbot
+│   │   └── ...
+│   └── services/
+│       ├── agentService.ts     # Analysis API
+│       ├── geminiService.ts    # AI API
+│       └── dbService.ts        # Database API
+│
+├── PROJECT_DOCUMENTATION.html  # Interactive docs
+└── README.md
+```
 
 ---
+
+## 🔌 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/login` | Login/Register user |
+| POST | `/api/analysis/run` | Run crop analysis |
+| POST | `/api/crops/details` | Get detailed crop insights |
+| GET | `/api/history` | Fetch saved reports |
+| DELETE | `/api/history/{id}` | Delete a report |
+| POST | `/api/chat/ask` | Ask AI chatbot |
+| GET | `/api/chat/history` | Get chat history |
+| GET | `/api/resources` | Search knowledge base |
+| GET | `/api/marketplace` | Search agri products |
+
+---
+
+## 📄 Documentation
+
+For detailed interactive documentation with architecture blueprints:
+
+### [👉 VIEW FULL DOCUMENTATION](./PROJECT_DOCUMENTATION.html)
+
+---
+
+## 🏆 Why Smart Agri Advisor?
+
+| Traditional Apps | Smart Agri Advisor |
+|------------------|-------------------|
+| Static/outdated prices | Live Mandi grounding |
+| Generic recommendations | Location-specific AI |
+| Session-based memory | Persistent neural memory |
+| Single API key | Automatic key rotation |
+| Basic UI | Premium glassmorphic design |
+
+---
+
+## 👩‍💻 Developer
+
+**Aadya Madankar**  
+📧 GitHub: [@Aadya-Madankar](https://github.com/Aadya-Madankar)
+
+---
+
 <div align="center">
   <p><b>Designed for India. Engineered for Impact.</b></p>
-  <p>© 2025 | Aadya Madankar</p>
+  <p>© 2025 | Smart Agri Advisor</p>
 </div>

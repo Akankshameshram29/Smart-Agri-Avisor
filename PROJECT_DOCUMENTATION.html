@@ -4,16 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Agri Advisor - Intelligent Crop Advisor Project Documentation</title>
+    <title>Smart Agri Advisor - Project Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap"
         rel="stylesheet">
     <style>
         body {
             font-family: 'Outfit', sans-serif;
-            background: #fdfdfd;
-            color: #1e293b;
+            background: #fafbfc;
+            color: #334155;
+            line-height: 1.7;
         }
 
         .font-heading {
@@ -30,20 +32,20 @@
         .premium-card {
             background: white;
             border: 1px solid #e2e8f0;
-            border-radius: 24px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+            border-radius: 28px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
         }
 
         .premium-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.08);
         }
 
         .badge {
             background: #ecfdf5;
             color: #065f46;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 99px;
             font-weight: 800;
             font-size: 0.7rem;
@@ -52,22 +54,30 @@
             border: 1px solid #d1fae5;
         }
 
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: 16px;
+            padding: 20px 24px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
         @media print {
             .no-print {
                 display: none;
             }
 
             body {
+                background: white;
                 padding: 0;
                 margin: 0;
-                background: white;
             }
 
             .premium-card {
-                border: none;
+                border: 1px solid #eee;
                 box-shadow: none;
-                margin-bottom: 2rem;
-                page-break-inside: avoid;
             }
 
             .page-break {
@@ -78,243 +88,276 @@
 </head>
 
 <body class="p-8 md:p-20">
+    <div class="max-w-5xl mx-auto space-y-20">
 
-    <div class="max-w-4xl mx-auto space-y-20">
-        <!-- HEADER SECTION -->
+        <!-- HEADER -->
         <header class="text-center space-y-6 py-10">
             <div class="inline-flex items-center gap-2 mb-4">
-                <span class="badge">Official Documentation</span>
+                <span class="badge">Project Documentation v2.0</span>
             </div>
-            <h1 class="text-6xl md:text-8xl font-heading text-slate-900 leading-tight">Smart Agri Advisor<br><span
-                    class="gradient-text">Neural Persistence</span></h1>
-            <p class="text-xl text-slate-500 font-medium max-w-2xl mx-auto">The world's first AI-powered Krishi
-                Expert for Indian farmers driven by precise map-based geo-tagging and persistent identity storage.
-                Providing high-fidelity Mandi
-                intelligence and chronological market
-                forecasts.</p>
+            <h1 class="text-5xl md:text-7xl font-heading text-slate-900 leading-tight">
+                Smart Agri Advisor<br>
+                <span class="gradient-text">Technical Overview</span>
+            </h1>
+            <p class="text-xl text-slate-500 font-medium max-w-2xl mx-auto">
+                Complete architecture documentation for the AI-powered agricultural intelligence platform.
+            </p>
             <div class="flex items-center justify-center gap-4 py-8 no-print">
                 <button onclick="window.print()"
-                    class="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-emerald-500 transition-all">Download
-                    as PDF</button>
+                    class="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl hover:bg-emerald-500 transition-all">
+                    Download as PDF
+                </button>
             </div>
         </header>
 
-        <!-- TECHNOLOGY STACK -->
-        <section class="space-y-10">
+        <!-- OVERVIEW -->
+        <section class="space-y-8">
             <div class="flex items-center gap-4">
                 <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
-                <h2 class="text-3xl font-heading text-slate-800">Advanced Technological Stack</h2>
+                <h2 class="text-3xl font-heading text-slate-900">System Overview</h2>
+            </div>
+            <div class="premium-card p-10">
+                <p class="text-lg text-slate-600 mb-6">
+                    Smart Agri Advisor is a full-stack agricultural intelligence platform that combines:
+                </p>
+                <ul class="space-y-4 text-slate-600">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>React 19 Frontend</strong> with Vite for lightning-fast development</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>FastAPI Backend</strong> with SQLAlchemy ORM for persistent storage</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>Gemini 2.5 Flash</strong> for AI-powered recommendations</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>Serper API</strong> for live web grounding of Mandi prices</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-emerald-500 mt-1"></i>
+                        <span><strong>OpenStreetMap Nominatim</strong> for reverse geocoding</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ARCHITECTURE -->
+        <section class="space-y-8 page-break">
+            <div class="flex items-center gap-4">
+                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
+                <h2 class="text-3xl font-heading text-slate-900">Architecture</h2>
+            </div>
+            <div class="code-block">
+                <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                        FRONTEND                              │
+│  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐         │
+│  │ App.tsx │  │ Chat    │  │ Details │  │ History │         │
+│  └────┬────┘  └────┬────┘  └────┬────┘  └────┬────┘         │
+│       │            │            │            │               │
+│       └────────────┴────────────┴────────────┘               │
+│                         │                                    │
+│                    API Calls                                 │
+└─────────────────────────┬───────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│                        BACKEND                               │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │                      app.py                          │    │
+│  │  /api/auth  /api/analysis  /api/chat  /api/history  │    │
+│  └─────────────────────────┬───────────────────────────┘    │
+│                            │                                 │
+│    ┌───────────────────────┼───────────────────────┐        │
+│    ▼                       ▼                       ▼        │
+│ ┌──────────┐    ┌──────────────────┐    ┌──────────────┐   │
+│ │db_service│    │  agent_service   │    │gemini_service│   │
+│ │ SQLite   │    │  Orchestration   │    │   AI + Web   │   │
+│ └──────────┘    └──────────────────┘    └──────────────┘   │
+└─────────────────────────────────────────────────────────────┘
+                          │
+          ┌───────────────┼───────────────┐
+          ▼               ▼               ▼
+    ┌──────────┐    ┌──────────┐    ┌──────────┐
+    │ Gemini   │    │ Serper   │    │ OSM      │
+    │ 2.5 Flash│    │ Web API  │    │ Nominatim│
+    └──────────┘    └──────────┘    └──────────┘
+                </pre>
+            </div>
+        </section>
+
+        <!-- API ENDPOINTS -->
+        <section class="space-y-8">
+            <div class="flex items-center gap-4">
+                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
+                <h2 class="text-3xl font-heading text-slate-900">API Endpoints</h2>
+            </div>
+            <div class="overflow-hidden rounded-3xl border border-slate-200">
+                <table class="w-full text-left bg-white">
+                    <thead class="bg-slate-50 border-b border-slate-200">
+                        <tr>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-wider">Method</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-wider">Endpoint</th>
+                            <th class="p-6 text-xs font-black text-slate-400 uppercase tracking-wider">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg text-sm font-bold">POST</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/auth/login</td>
+                            <td class="p-6 text-slate-500">Login or register user</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg text-sm font-bold">POST</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/analysis/run</td>
+                            <td class="p-6 text-slate-500">Run full crop analysis</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg text-sm font-bold">POST</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/crops/details</td>
+                            <td class="p-6 text-slate-500">Get detailed crop insights</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-bold">GET</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/history</td>
+                            <td class="p-6 text-slate-500">Fetch saved reports</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-red-100 text-red-700 px-3 py-1 rounded-lg text-sm font-bold">DELETE</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/history/{id}</td>
+                            <td class="p-6 text-slate-500">Delete a report</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-lg text-sm font-bold">POST</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/chat/ask</td>
+                            <td class="p-6 text-slate-500">Ask AI chatbot</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6"><span
+                                    class="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg text-sm font-bold">GET</span>
+                            </td>
+                            <td class="p-6 font-mono text-sm">/api/chat/history</td>
+                            <td class="p-6 text-slate-500">Get chat history</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- DATABASE SCHEMA -->
+        <section class="space-y-8 page-break">
+            <div class="flex items-center gap-4">
+                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
+                <h2 class="text-3xl font-heading text-slate-900">Database Schema</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="premium-card p-8">
+                    <h4 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-user text-emerald-500"></i> Users
+                    </h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">id</code> INTEGER PK</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">phone</code> VARCHAR(15) UNIQUE</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">name</code> VARCHAR(100)</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">joined_at</code> DATETIME</li>
+                    </ul>
+                </div>
+                <div class="premium-card p-8">
+                    <h4 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-comments text-emerald-500"></i> ChatMessages
+                    </h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">id</code> INTEGER PK</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">user_id</code> INTEGER FK</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">role</code> VARCHAR(20)</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">content</code> TEXT</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">timestamp</code> DATETIME</li>
+                    </ul>
+                </div>
+                <div class="premium-card p-8">
+                    <h4 class="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-file-lines text-emerald-500"></i> FarmerRecords
+                    </h4>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">id</code> VARCHAR(20) PK</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">user_id</code> INTEGER FK</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">lat, lng</code> FLOAT</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">district</code> VARCHAR(100)</li>
+                        <li><code class="bg-slate-100 px-2 py-1 rounded">data</code> TEXT (JSON)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- KEY FEATURES -->
+        <section class="space-y-8">
+            <div class="flex items-center gap-4">
+                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
+                <h2 class="text-3xl font-heading text-slate-900">Key Features</h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="premium-card p-10">
-                    <h3 class="text-sm font-black text-emerald-600 uppercase tracking-widest mb-4">Frontend Layer</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Persistent State Pipeline</span>: Lifted-state architecture
-                                that survives tab switches and refreshes.</div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Streaming Feedback Engine</span>: Simulated
-                                character-by-character response delivery for advisor realism.</div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Optimized Glass UI</span>: Low-noise design language with
-                                standardized card-based strategy reporting.</div>
-                        </li>
-                    </ul>
+                    <h4 class="text-xl font-bold text-slate-900 mb-4">🔄 API Key Rotation</h4>
+                    <p class="text-slate-500 mb-4">Three Gemini API keys with automatic failover. If one exhausts quota,
+                        the system switches instantly.</p>
+                    <div class="code-block text-sm">
+                        GEMINI_KEYS=key1,key2,key3
+                    </div>
                 </div>
                 <div class="premium-card p-10">
-                    <h3 class="text-sm font-black text-emerald-600 uppercase tracking-widest mb-4">Backend &
-                        Persistence</h3>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Unified SQLite Core</span>: Permanent storage for Chat History,
-                                User Profiles, and Analysis Records.</div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Linguistic Script Matching</span>: Automated script-clamping
-                                for Hinglish conversations to ensure natural dialogue.</div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <div class="mt-1 w-2 h-2 rounded-full bg-emerald-400"></div>
-                            <div><span class="font-bold">Secure Identity Flow</span>: Integrated name/phone registration
-                                with persistent data encryption.</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- HOW IT WORKS -->
-        <section class="space-y-10 page-break">
-            <div class="flex items-center gap-4">
-                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
-                <h2 class="text-3xl font-heading text-slate-800">Operational Mechanism</h2>
-            </div>
-            <div class="space-y-8">
-                <div class="flex gap-10 items-center">
-                    <div class="text-7xl font-heading text-emerald-100 italic">01</div>
-                    <div class="space-y-2">
-                        <h4 class="text-xl font-bold text-slate-800">Identity & Persistence</h4>
-                        <p class="text-slate-500">The application utilizes a persistent identity layer. On login, users
-                            register their name and phone. All conversations are stored in a centralized SQLite
-                            database, allowing the farmer to switch between 'Dashboard' and 'Chat' without losing their
-                            current dialogue or historical insights.</p>
+                    <h4 class="text-xl font-bold text-slate-900 mb-4">🌐 Live Web Grounding</h4>
+                    <p class="text-slate-500 mb-4">Serper API searches for real Mandi prices before generating
+                        recommendations. No hallucination.</p>
+                    <div class="code-block text-sm">
+                        _search_web(f"{crop} Mandi price today")
                     </div>
                 </div>
-                <div class="flex gap-10 items-center">
-                    <div class="text-7xl font-heading text-emerald-100 italic">02</div>
-                    <div class="space-y-2">
-                        <h4 class="text-xl font-bold text-slate-800">Linguistic Continuity & Script-Locking</h4>
-                        <p class="text-slate-500">An advanced script-matching engine scans for Latin vs. Devanagari
-                            characters. If a user types in Hinglish using English characters, the AI is "clamped" into
-                            Latin-only output, ensuring the advisor matches the energy and script style of the rural
-                            user.</p>
+                <div class="premium-card p-10">
+                    <h4 class="text-xl font-bold text-slate-900 mb-4">📍 Reverse Geocoding</h4>
+                    <p class="text-slate-500 mb-4">OpenStreetMap Nominatim converts GPS coordinates to district names.
+                        Free, no API key required.</p>
+                    <div class="code-block text-sm">
+                        nominatim.openstreetmap.org/reverse
                     </div>
                 </div>
-                <div class="flex gap-10 items-center">
-                    <div class="text-7xl font-heading text-emerald-100 italic">03</div>
-                    <div class="space-y-2">
-                        <h4 class="text-xl font-bold text-slate-800">Visual Optimization Pipeline</h4>
-                        <p class="text-slate-500">Strategy reports are processed through an aesthetic filter that strips
-                            raw markdown symbols (**), reduces background noise opacity (reduced to 0.04), and presents
-                            dense advice as clean, digestible cards for mobile-first accessibility.</p>
-                    </div>
-                </div>
-                <div class="flex gap-10 items-center">
-                    <div class="text-7xl font-heading text-emerald-100 italic">04</div>
-                    <div class="space-y-2">
-                        <h4 class="text-xl font-bold text-slate-800">Uninterruptible Intelligence</h4>
-                        <p class="text-slate-500">Our autonomous failover logic seamlessly manages a pool of
-                            high-capacity Gemini 2.5 Flash keys. In the rare event of a node timeout, the system
-                            recovers in milliseconds, ensuring the advisor is always ready to help.</p>
+                <div class="premium-card p-10">
+                    <h4 class="text-xl font-bold text-slate-900 mb-4">🧠 Neural Memory</h4>
+                    <p class="text-slate-500 mb-4">AI chatbot receives full user context: name, past 5 searches, current
+                        screen, active report.</p>
+                    <div class="code-block text-sm">
+                        get_full_user_context(phone)
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- DEVELOPER ANALYSIS SECTION -->
-        <section class="space-y-10 page-break">
-            <div class="flex items-center gap-4">
-                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
-                <h2 class="text-3xl font-heading text-slate-800 italic">Developer Analysis & Demo Guide</h2>
-            </div>
-            <div class="premium-card p-10 bg-slate-50 border-slate-200">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <div class="space-y-6">
-                        <h4 class="text-lg font-bold text-emerald-700 uppercase tracking-tighter">Architecture: Lifted
-                            State Persistence</h4>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            A key highlight for developers is the <strong>Lifted State Management</strong>. By moving
-                            the chat and loading states to <code>App.tsx</code>, we ensure that a user can browse their
-                            mandi report and switch back to the AI chat without re-rendering or re-fetching. This mimics
-                            a native app experience where memory is preserved across views.
-                        </p>
-                    </div>
-                    <div class="space-y-6">
-                        <h4 class="text-lg font-bold text-emerald-700 uppercase tracking-tighter">The Script-Match
-                            Engine</h4>
-                        <p class="text-sm text-slate-600 leading-relaxed">
-                            Explain the <code>is_latin</code> scanning logic in the backend. By identifying the
-                            character set (Unicode Range) of the input, we dynamically append script-locking
-                            instructions to the system prompt, preventing the common AI flaw of switching to Devanagari
-                            script mid-conversation.
-                        </p>
-                    </div>
-                </div>
-                <div class="mt-10 pt-8 border-t border-slate-200">
-                    <h4 class="text-sm font-black text-slate-800 mb-4">Visual Polish: "Wow" Effect Mechanics</h4>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">
-                        Mention the custom <code>renderMessage</code> logic which uses regex to transform raw markdown
-                        bullets and headers into high-fidelity UI elements. This ensures that even if the AI outputs
-                        standard text, it appears on the frontend as a designer-crafted layout.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- USABILITY & PERSONAS -->
-        <section class="space-y-10 page-break">
-            <div class="flex items-center gap-4">
-                <div class="w-1.5 h-10 bg-emerald-500 rounded-full"></div>
-                <h2 class="text-3xl font-heading text-slate-800">Impact & Accessibility</h2>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div class="space-y-4">
-                    <h3 class="text-xl font-bold text-slate-800 italic">Who will use it?</h3>
-                    <p class="text-slate-500 leading-relaxed">
-                        <span class="font-bold text-emerald-600">— Progress Farmers</span> looking to optimize their
-                        portfolio beyond tradition.<br>
-                        <span class="font-bold text-emerald-600">— Mandi Traders</span> tracking regional volatility and
-                        yield probabilities.<br>
-                        <span class="font-bold text-emerald-600">— Agri-Advisors</span> needing data-backed insights for
-                        village-level consulting.
-                    </p>
-                </div>
-                <div class="space-y-4">
-                    <h3 class="text-xl font-bold text-slate-800 italic">Why is it usable?</h3>
-                    <p class="text-slate-500 leading-relaxed">
-                        The interface eliminates technical barriers using "Village-Simple" language. It provides clear,
-                        actionable "Risk Mitigation Plans" that explain exactly what to do if rain hits or prices crash,
-                        making it a true digital companion.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- DIFFERENTIATION -->
-        <section class="bg-slate-900 p-16 rounded-[48px] text-white space-y-12 page-break">
-            <div class="space-y-4">
-                <h2 class="text-4xl font-heading leading-tight">Smart Agri Advisor vs.<br>The Old Way</h2>
-                <p class="text-emerald-400 font-bold uppercase tracking-widest text-xs">The Competitive Advantage</p>
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4 pb-4 border-b border-white/10">
-                        <div
-                            class="w-12 h-12 rounded-full bg-rose-500/20 text-rose-500 flex items-center justify-center font-bold">
-                            X</div>
-                        <h4 class="text-lg font-bold">Traditional Apps</h4>
-                    </div>
-                    <ul class="space-y-4 text-slate-400 text-sm">
-                        <li>— Static databases (Often 6-12 months old)</li>
-                        <li>— Generic advice (Call help center)</li>
-                        <li>— Manual data entry for every plot</li>
-                        <li>— No risk-bound/volatility forecasting</li>
-                    </ul>
-                </div>
-                <div class="space-y-6">
-                    <div class="flex items-center gap-4 pb-4 border-b border-emerald-500/20">
-                        <div
-                            class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center font-bold">
-                            ✓</div>
-                        <h4 class="text-lg font-bold">Smart Agri Advisor Neural</h4>
-                    </div>
-                    <ul class="space-y-4 text-emerald-100 text-sm font-medium">
-                        <li>— Live Search Grounding (Refreshed hourly)</li>
-                        <li>— 2026 AI Projections with Risk Lower-Bounds</li>
-                        <li>— 1-Tap Geo-Location Analysis</li>
-                        <li>— Hyper-local fertilization & recovery strategies</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- CLOSING -->
-        <footer class="text-center pt-20 border-t border-slate-100">
-            <p class="text-slate-400 font-medium italic">Smart Agri Advisor Neural | Project Documentation
-                Archive
-            </p>
-            <p class="text-[10px] text-slate-300 font-black uppercase tracking-[0.4em] mt-4">Persistent Identity Asset
-            </p>
+        <!-- FOOTER -->
+        <footer class="text-center pt-16 border-t border-slate-100 pb-10">
+            <h4 class="text-2xl font-heading text-slate-900 mb-4">Designed for India. Engineered for Impact.</h4>
+            <p class="text-slate-400 mb-8">Smart Agri Advisor © 2025 | Last Updated: 31 December 2025</p>
+            <a href="https://github.com/Aadya-Madankar/Smart-Agri-Avisor" target="_blank"
+                class="inline-flex items-center gap-2 text-emerald-600 font-bold hover:text-emerald-700 transition-colors">
+                <i class="fab fa-github"></i>
+                Aadya-Madankar/Smart-Agri-Avisor
+            </a>
         </footer>
     </div>
-
 </body>
 
 </html>

@@ -37,3 +37,6 @@ Thumbs.db
 # Temporary Files
 *.tmp
 *.temp
+
+# Personal / Private Files (Not for GitHub)
+aadya.md
