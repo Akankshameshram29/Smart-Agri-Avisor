@@ -81,21 +81,37 @@ class GeminiService:
             print(f"Serper search failed: {e}")
             return ""
     
-    def get_crop_details(self, crop_name: str, location: dict, soil: dict) -> dict:
+    def get_crop_details(self, crop_name: str, location: dict, soil: dict, phone: str, analysis_id: str) -> dict:
         """Get detailed crop strategy with comprehensive price chart data."""
         today = datetime.now()
-        today_str = today.strftime('%d %B %Y')
+        today_str = today.strftime('%d %B %Y')  # e.g., "31 December 2025"
         current_month = today.strftime('%B %Y')
+        today_day = today.day  # Dynamic day number
         
         district = location.get('district', 'Unknown')
         state = location.get('state', 'India')
         
-        # Calculate past 4 months for historical data
+        # Calculate past 4 months with DYNAMIC dates (same day as today, or end of month)
         from dateutil.relativedelta import relativedelta
-        past_months = []
+        import calendar
+        
+        past_dates = []
         for i in range(4, 0, -1):
             past_date = today - relativedelta(months=i)
-            past_months.append(past_date.strftime('%B %Y'))
+            # Use same day as today, or last day of that month if the month is shorter
+            max_day = calendar.monthrange(past_date.year, past_date.month)[1]
+            actual_day = min(today_day, max_day)
+            past_date = past_date.replace(day=actual_day)
+            past_dates.append(past_date.strftime('%d %B %Y'))
+        
+        # Calculate future 4 months with DYNAMIC dates
+        future_dates = []
+        for i in range(1, 5):
+            future_date = today + relativedelta(months=i)
+            max_day = calendar.monthrange(future_date.year, future_date.month)[1]
+            actual_day = min(today_day, max_day)
+            future_date = future_date.replace(day=actual_day)
+            future_dates.append(future_date.strftime('%d %B %Y'))
         
         # Get live context via Serper
         search_query = f"{crop_name} Mandi price {district} {state} today {today_str}"
@@ -111,9 +127,13 @@ class GeminiService:
         - Provide 3 REAL farming steps if conditions fail. No generic advice.
         
         TIMELINE & PRICING REQUIREMENTS:
-        1. CURRENT RATE: You MUST provide the exact Mandi rate for {current_month}.
-        2. HISTORICAL DATA: Provide rates for the LAST 4 MONTHS: {', '.join(past_months)}.
-        3. FORECAST (2026): Predict rates for the NEXT 4 MONTHS into 2026 (Jan, Feb, Mar, Apr).
+        1. CURRENT RATE (TODAY): You MUST provide the EXACT Mandi rate for TODAY ({today_str}).
+           - Use the exact date: "{today_str}"
+           - This is the LIVE price, not an average.
+        2. HISTORICAL DATA: Provide EXACT rates for these 4 PAST DATES: {', '.join(past_dates)}.
+           - Use these EXACT dates in your response.
+        3. FORECAST: Predict rates for these 4 FUTURE DATES: {', '.join(future_dates)}.
+           - Use these EXACT dates in your response.
         
         SOURCES REQUIREMENT:
         - Identify 2-3 real URLs from the LIVE MANDI GROUNDING DATA above.
@@ -122,28 +142,44 @@ class GeminiService:
         
         DATA STRUCTURE:
         - Each entry in 'price_history' MUST have:
-          - 'date': Month Year format (e.g. 'December 2025')
-          - 'price': High/Bullish rate in ₹
+          - 'date': Use EXACT dates provided above (e.g., "{today_str}", "{past_dates[0]}", etc.)
+          - 'price': EXACT High/Bullish rate in ₹ per quintal (NOT an average)
           - 'bearish_price': Lower/Risk rate (usually 10-15% lower)
           - 'type': Exactly one of 'historical', 'current', 'prediction'
+        - The 'current' type entry MUST use today's exact date: "{today_str}"
         
         STRATEGIC REQUIREMENTS for 'detailed_strategy' field:
-        - LANGUAGE: Use VERY SIMPLE, village-level language.
-        - FORMAT: Use STICT MARKDOWN. Each section MUST start with '### ' on a NEW LINE.
-        - CONTENT:
-          ### 1. Present and Future Price
-          • [Details here using ₹/kg format (Divide Mandi rate by 100). For example: ₹50/kg instead of ₹5000/quintal]
-          
-          ### 2. Technique for Proper Cultivation
-          • [Step-by-step instructions]
-          
-          ### 3. Precautions
-          • [What to avoid]
-          
-          ### 4. Fertilizer Suggestion
-          • [Schedule here]
+        - LANGUAGE: Use VERY SIMPLE, village-level language (Hinglish/English).
+        - FORMAT: Each point MUST be on a NEW LINE starting with a bullet point symbol (•).
+        - SECTIONS: Exactly 4 sections, each starting with '### '.
         
-        CRITICAL: Use TWO NEWLINES between sections. No run-on paragraphs.
+        STRUCTURE:
+        ### 1. Present and Future Price
+        • Current rate in your Mandi is ₹[price]/kg.
+        • In the next 3 months, price expect to [increase/decrease] to ₹[price]/kg.
+        • Best time to sell: [Month].
+        
+        ### 2. Technique for Proper Cultivation
+        • [Step 1: Soil preparation]
+        • [Step 2: Sowing/Planting details]
+        • [Step 3: Water management]
+        • [Step 4: Harvesting timing]
+        
+        ### 3. Precautions
+        • Avoid [Mistake 1].
+        • Watch out for [Pest/Disease] during [Month].
+        • Never [Mistake 3].
+        
+        ### 4. Fertilizer Suggestion
+        • Basal dose: [Fertilizer Name/Type]
+        • After 30 days: [Fertilizer Name/Type]
+        • Foliar spray: [Fertilizer Name/Type]
+        
+        CRITICAL: 
+        - DO NOT write paragraphs. 
+        - Use ONLY bullet points (•) for details.
+        - Ensure double newlines between '###' sections.
+        - Respond in the script the user uses (Latin letters if they use Latin).
         
         Ensure exactly 9 points in total: 4 past, 1 current ({current_month}), and 4 future.
         STRICT JSON ONLY."""
@@ -414,61 +450,36 @@ class GeminiService:
     def ask_question(self, question: str, history: list = None, context: dict = None) -> str:
         """Answer agricultural questions based on context and conversation history."""
         
-        # Extract user information from context
-        user_name = context.get('userName', '') if context else ''
-        total_searches = context.get('totalSearches', 0) if context else 0
-        current_crops = context.get('currentSessionCrops', []) if context else []
-        explored_crops = context.get('currentSessionExploredCrops', []) if context else []
-        activity_summary = context.get('recentActivitySummary', []) if context else []
-        location = context.get('location', {}) if context else {}
-        soil = context.get('soil', {}) if context else {}
+        # Extract user name and history from context
+        db_profile = context.get('db_profile', {}) if context else {}
+        user_name = db_profile.get('name') or context.get('userName', 'Farmer')
+        search_history = db_profile.get('search_history', [])
         
-        # Build activity history description
-        activity_description = ""
-        if activity_summary:
-            activity_lines = []
-            for i, activity in enumerate(activity_summary[:3]):
-                crops_str = ", ".join(activity.get('crops', [])[:5])
-                explored_str = ", ".join(activity.get('exploredCrops', []))
-                date_str = activity.get('date', 'Recently')[:10] if activity.get('date') else 'Recently'
-                district_str = activity.get('district', 'Unknown')
-                line = f"  {i+1}. On {date_str} in {district_str}: Recommended crops were [{crops_str}]"
-                if explored_str:
-                    line += f". User explored details for: [{explored_str}]"
-                activity_lines.append(line)
-            activity_description = "\n".join(activity_lines)
+        # Personalize based on history
+        history_summary = ""
+        if search_history:
+            history_summary = "\nUSER'S RECENT SEARCH HISTORY (Neural Vault Data):\n"
+            for s in search_history[:5]: # Top 5 recent
+                crops = ", ".join(s.get('crops_recommended', []))
+                history_summary += f"- {s.get('date', 'Unknown')}: Searched in {s.get('location', 'Unknown')}. Recommended: {crops}\n"
         
-        # Build comprehensive identity and context block
-        identity_block = f"""
-USER IDENTITY & ACTIVITY PROFILE:
-- Name: {user_name if user_name else 'Unknown'}
-- Total Lifetime Searches: {total_searches}
-- Current Session Location: {location.get('district', 'Not set')}, {location.get('state', '')}
-- Current Soil Data: N={soil.get('n', 'N/A')}, P={soil.get('p', 'N/A')}, K={soil.get('k', 'N/A')}, pH={soil.get('ph', 'N/A')}
-- Crops Recommended This Session: {', '.join(current_crops) if current_crops else 'None yet'}
-- Crops User Explored in Detail: {', '.join(explored_crops) if explored_crops else 'None yet'}
-
-RECENT SEARCH HISTORY:
-{activity_description if activity_description else '  No previous searches recorded.'}
-
-YOU HAVE FULL ACCESS TO THIS USER'S DATA. If they ask "maine kya search kiya?", "mera naam kya hai?", "kaunsi fasal dekhi maine?", etc., YOU MUST answer from the data above. Do NOT say you don't know.
-""" if user_name or activity_summary else ""
+        system_prompt = f"""You are an Expert Agri-Consultant for Indian farmers. 
+        Your primary goal is to provide empathetic, practical, and scientifically sound agricultural advice. 
         
-        system_prompt = f"""You are an Expert Agri-Consultant for Indian farmers with FULL MEMORY of user interactions.
-        Your primary goal is to provide empathetic, practical, and scientifically sound agricultural advice.
+        USER IDENTITY: 
+        - Name: {user_name}
+        - Total Reports Generated: {db_profile.get('total_searches', 0)}
+        {history_summary}
         
-        {identity_block}
+        KNOWLEDGE GROUNDING:
+        - YOU KNOW the user's name is {user_name}.
+        - YOU HAVE ACCESS to their history. If they ask about past searches, refer to the "Neural Vault Data" provided above.
+        - Treat the user like a valued partner.
         
-        ### MEMORY-AWARE RESPONSES ###
-        - You KNOW the user's name, their search history, crops they explored, and their soil/location data.
-        - When user asks about their history, past searches, or their name, REFER TO THE DATA ABOVE.
-        - Proactively mention their past searches if relevant to their current question.
-        - Personalize advice based on their explored crops and location.
-        
-        EMPATHY & FOCUS:
-        - If the user expresses a problem (loss, pests, failure), ALWAYS acknowledge it first with empathy.
-        - PRIORITIZE the user's specific question over general context.
-        - Be a problem-solver, not just a data reporter.
+        CURRENT SESSION AWARENESS (LIVE ON SCREEN):
+        - Current Tab Open: {context.get('activeTab', 'dashboard')}
+        - Active Report on Screen: {json.dumps(context.get('analysis')) if context.get('analysis') else 'None - User has not run an analysis yet.'}
+        - If the user refers to "this report" or "the crops I see now", they are referring to the Active Report above.
         
         ### MANDATORY SCRIPT RULE (CRITICAL) ###
         - If the user writes in the English Alphabet (Latin characters), you MUST respond ONLY in the English Alphabet.
@@ -476,11 +487,18 @@ YOU HAVE FULL ACCESS TO THIS USER'S DATA. If they ask "maine kya search kiya?", 
         - Match Hinglish with Hinglish. Example: "Hi" -> "Hello", "Kaise ho" -> "Main theek hoon".
         - BAN ON REPETITIVE GREETINGS: Do not start with "Namaste" or "Kisan bhai" every time. Be direct.
         
+        EMPATHY & FOCUS:
+        - If the user expresses a problem (loss, pests), acknowledge it first with empathy.
+        - Be a problem-solver, not just a data reporter.
+        
+        If local context is provided, make your advice specific to their climate.
+        
         STRICT FORMATTING:
         - Use **bold** only for highlighting specific critical values or terms inside sentences.
         - DO NOT use bold markers (**) for titles or headers.
         - Use Bullet points (•) for steps.
-        - PRICING: ALWAYS use ₹/kg format for crops.
+        - PRICING: ALWAYS use ₹/kg format for crops. For equipment, provide the absolute price in ₹ from platforms like Amazon/Flipkart if known.
+        - MARKETPLACE: If the user asks about buying equipment, seeds, or tools, provide specific product names, estimated prices, and mention where they can buy it (e.g., "Available on AgriBegri or Amazon").
         - Keep output clean and free of unnecessary markdown symbols. """
         
         contents = []
@@ -494,7 +512,8 @@ YOU HAVE FULL ACCESS TO THIS USER'S DATA. If they ask "maine kya search kiya?", 
         # Add the current question with context
         current_text = f"QUESTION: {question}"
         if context:
-            current_text += f"\nBACKGROUND CONTEXT (Farmer Info): {json.dumps(context)}"
+            # We already extracted some of this for the system prompt, but providing raw context helps too
+            current_text += f"\nBACKGROUND CONTEXT: {json.dumps(context)}"
             
         contents.append(types.Content(role="user", parts=[types.Part.from_text(text=current_text)]))
 

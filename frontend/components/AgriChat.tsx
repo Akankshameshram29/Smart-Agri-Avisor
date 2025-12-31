@@ -11,7 +11,6 @@ interface Message {
 interface Props {
     user: User;
     currentContext?: any;
-    userHistory?: any[];
     messages: Message[];
     setMessages: React.Dispatch<React.SetStateAction<Message[]>>;
     loading: boolean;
@@ -21,7 +20,7 @@ interface Props {
 const renderMessage = (text: string) => {
     return (
         <div className="space-y-3">
-            {text.split('\n').map((line, lineIdx) => {
+            {text.replace(/\\n/g, '\n').split('\n').map((line, lineIdx) => {
                 const trimmedLine = line.trim();
                 if (!trimmedLine) return <div key={lineIdx} className="h-2" />;
 
@@ -68,7 +67,7 @@ const renderMessage = (text: string) => {
     );
 };
 
-const AgriChat: React.FC<Props> = ({ user, currentContext, userHistory, messages, setMessages, loading, setLoading }) => {
+const AgriChat: React.FC<Props> = ({ user, currentContext, messages, setMessages, loading, setLoading }) => {
     const [input, setInput] = useState('');
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -92,25 +91,8 @@ const AgriChat: React.FC<Props> = ({ user, currentContext, userHistory, messages
 
         try {
             const history = messages.slice(-10);
-
-            // Build comprehensive user activity context
-            const activitySummary = userHistory?.slice(0, 5).map(record => ({
-                district: record.district,
-                date: record.timestamp,
-                crops: record.data?.crops?.map((c: any) => c.name) || [],
-                exploredCrops: record.data?.crop_details ? Object.keys(record.data.crop_details) : []
-            })) || [];
-
-            const enrichedContext = {
-                ...currentContext,
-                userName: user.name,
-                userPhone: user.phone,
-                totalSearches: userHistory?.length || 0,
-                recentActivitySummary: activitySummary,
-                currentSessionCrops: currentContext?.recommendedCrops || [],
-                currentSessionExploredCrops: currentContext?.exploredCrops || []
-            };
-
+            // Include user's name in context for personalized responses
+            const enrichedContext = { ...currentContext, userName: user.name };
             const answer = await geminiService.askQuestion(user.phone, userMsg, enrichedContext, history);
 
             // Start simulated streaming

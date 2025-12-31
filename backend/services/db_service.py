@@ -7,19 +7,47 @@ class DatabaseService:
     """Database operations for Smart Agri Advisor."""
     
     def get_or_create_user(self, db, phone: str, name: str = "Farmer") -> User:
-        """Get existing user or create new one. Updates name if user exists and new name is provided."""
+        """Get existing user or create new one. Updates name if user exists and a new name is provided."""
         user = db.query(User).filter(User.phone == phone).first()
         if not user:
             user = User(phone=phone, name=name, joined_at=datetime.utcnow())
             db.add(user)
             db.commit()
             db.refresh(user)
-        elif name and name != "Farmer" and user.name != name:
-            # Update user's name if a new, non-default name is provided
-            user.name = name
-            db.commit()
-            db.refresh(user)
+        elif name and name != "Farmer":
+            # Update user's name if a new name is provided (and it's not the default "Farmer")
+            if user.name != name:
+                user.name = name
+                db.commit()
+                db.refresh(user)
         return user
+
+    def get_full_user_context(self, db, phone: str) -> dict:
+        """Retrieve everything we know about the user for AI grounding."""
+        user = db.query(User).filter(User.phone == phone).first()
+        if not user:
+            return {}
+            
+        history = self.get_history(db, phone)
+        # Summarize searches
+        searches = []
+        for h in history:
+            data = h.get('data', {})
+            crops = [c.get('name') for c in data.get('crops', [])]
+            searches.append({
+                "date": h.get('timestamp'),
+                "location": f"{h.get('district')}",
+                "crops_recommended": crops,
+                "soil": data.get('soil')
+            })
+            
+        return {
+            "name": user.name,
+            "phone": user.phone,
+            "joined_at": user.joined_at.isoformat() if user.joined_at else None,
+            "search_history": searches,
+            "total_searches": len(history)
+        }
     
     def update_user_name(self, db, phone: str, new_name: str) -> User:
         """Update an existing user's name."""

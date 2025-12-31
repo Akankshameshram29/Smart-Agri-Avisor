@@ -140,6 +140,10 @@ const App: React.FC = () => {
         forceFastMode
       );
       setAnalysis(data);
+
+      // Refresh history and training count after new analysis is saved
+      dbService.getHistory(user.phone).then(setHistory);
+      dbService.getGlobalSearchCount(user.phone).then(setTrainingCount);
     } catch (err: any) {
       setError(err.message || "Expert system unreachable. Please check connection.");
     } finally {
@@ -290,6 +294,9 @@ const App: React.FC = () => {
       };
       setAnalysis(updatedAnalysis);
       setSelectedCropDetail(detail);
+
+      // Refresh history to update "X INSIGHTS SAVED" counter
+      dbService.getHistory(user.phone).then(setHistory);
     } catch (err) {
       setError("Detailed insight engine timed out. Try again.");
     } finally {
@@ -563,14 +570,16 @@ const App: React.FC = () => {
         {activeTab === 'chat' && (
           <AgriChat
             user={user}
-            currentContext={analysis ? {
-              location: analysis.location,
-              soil: analysis.soil,
-              recommendedCrops: analysis.crops?.map(c => c.name) || [],
-              exploredCrops: analysis.crop_details ? Object.keys(analysis.crop_details) : [],
-              lastSearchTimestamp: analysis.timestamp
-            } : undefined}
-            userHistory={history}
+            currentContext={{
+              activeTab,
+              analysis: analysis ? {
+                id: analysis.id,
+                location: analysis.location,
+                soil: analysis.soil,
+                crops: analysis.crops.map(c => c.name),
+                timestamp: analysis.timestamp
+              } : null
+            }}
             messages={chatMessages}
             setMessages={setChatMessages}
             loading={chatLoading}

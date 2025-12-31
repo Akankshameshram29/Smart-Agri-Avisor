@@ -160,7 +160,13 @@ def get_crop_details(request: CropDetailsRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=400, detail="Crop name required")
     
     try:
-        detail = gemini_service.get_crop_details(request.cropName, request.location, request.soil)
+        detail = gemini_service.get_crop_details(
+            request.cropName, 
+            request.location, 
+            request.soil,
+            request.phone or "",
+            request.analysisId or ""
+        )
         
         # Update record with crop detail if phone and ID provided
         if request.phone and request.analysisId:
@@ -203,6 +209,29 @@ def get_stats(phone: str = Query(...), db: Session = Depends(get_db)):
     
     count = db_service.get_search_count(db, phone)
     return {"trainingCount": count}
+
+
+# ==================== HISTORY ROUTES ====================
+
+@app.get("/api/history")
+def get_history(phone: str = Query(...), db: Session = Depends(get_db)):
+    """Get all saved reports for a user."""
+    if not phone:
+        raise HTTPException(status_code=400, detail="Phone number required")
+    
+    return db_service.get_history(db, phone)
+
+
+@app.delete("/api/history/{record_id}")
+def delete_history_record(record_id: str, phone: str = Query(...), db: Session = Depends(get_db)):
+    """Delete a specific report from history."""
+    if not phone:
+        raise HTTPException(status_code=400, detail="Phone number required")
+    
+    success = db_service.delete_record(db, phone, record_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Record not found")
+    return {"success": True}
 
 
 # ==================== RESOURCE ROUTES ====================
@@ -251,8 +280,13 @@ def ask_question(request: ChatRequest, db: Session = Depends(get_db)):
         # 1. Save user message to database
         db_service.save_chat_message(db, request.phone, 'user', request.question)
         
-        # 2. Get AI answer
-        answer = gemini_service.ask_question(request.question, request.history, request.context)
+        # 2. Get AI answer with full historical context
+        user_context = db_service.get_full_user_context(db, request.phone)
+        
+        # Merge incoming transient context (like current tab/location) with permanent DB context
+        full_context = {**(request.context or {}), "db_profile": user_context}
+        
+        answer = gemini_service.ask_question(request.question, request.history, full_context)
         
         # 3. Save AI answer to database
         db_service.save_chat_message(db, request.phone, 'assistant', answer)

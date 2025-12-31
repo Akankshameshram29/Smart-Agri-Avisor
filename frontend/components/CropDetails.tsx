@@ -104,11 +104,12 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
                     />
                     <YAxis hide domain={['auto', 'auto']} />
                     <Tooltip
-                      contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontWeight: 'bold' }}
+                      contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontWeight: 'bold', padding: '12px 16px' }}
                       formatter={(value: number, name: string) => [
-                        `₹${(value / 100).toLocaleString()}/kg`,
-                        name === 'bearish_price' ? 'Worst Case (Risk)' : 'Expected Rate'
+                        `₹${value.toLocaleString()}/quintal (₹${(value / 100).toLocaleString()}/kg)`,
+                        name === 'bearish_price' ? 'Risk Price' : 'Mandi Rate'
                       ]}
+                      labelFormatter={(label) => `📅 ${label}`}
                     />
                     {/* Bullish / Normal Line */}
                     <Area
@@ -122,7 +123,7 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
                       activeDot={{ r: 8, stroke: '#fff', strokeWidth: 2 }}
                     />
                     {historyData.map((d: any, i) => d.type === 'current' && (
-                      <ReferenceLine key={i} x={d.date} stroke="#059669" strokeDasharray="3 3" />
+                      <ReferenceLine key={i} x={d.date} stroke="#059669" strokeWidth={2} strokeDasharray="5 5" label={{ value: "TODAY", position: "top", fill: "#059669", fontSize: 10, fontWeight: 800 }} />
                     ))}
                   </AreaChart>
                 </ResponsiveContainer>
@@ -161,43 +162,46 @@ const CropDetails: React.FC<Props> = ({ detail, onClose }) => {
 
             <div className="max-w-none text-sm text-slate-600 leading-relaxed bg-slate-50/50 p-6 rounded-[32px] border border-slate-100 shadow-inner">
               <div className="space-y-4">
-                {analysis.detailed_strategy.split('\n').map((line, i) => {
-                  const trimmedLine = line.trim();
-                  if (!trimmedLine) return <div key={i} className="h-1" />;
+                {analysis.detailed_strategy
+                  .replace(/\\n/g, '\n') // Handle literal \n if AI double encodes
+                  .split('\n')
+                  .map(l => l.trim())
+                  .filter(l => l.length > 0)
+                  .map((trimmedLine, i) => {
+                    // Premium Section Headers
+                    if (trimmedLine.startsWith('###')) {
+                      return (
+                        <div key={i} className="pt-4 group border-b border-emerald-100/50 pb-2 mb-4">
+                          <h4 className="text-emerald-950 font-black text-lg mb-2 flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-[10px] shadow-md group-hover:scale-110 transition-transform">
+                              <i className="fas fa-seedling"></i>
+                            </div>
+                            {trimmedLine.replace(/^###\s*\d*\.?\s*/, '').trim()}
+                          </h4>
+                        </div>
+                      );
+                    }
 
-                  // Premium Section Headers
-                  if (trimmedLine.startsWith('###')) {
+                    // Premium Bullet Cards
+                    if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || trimmedLine.startsWith('*') || /^\d+\./.test(trimmedLine)) {
+                      const content = trimmedLine.replace(/^[•\-\*\d+\.]\s*/, '').trim();
+                      return (
+                        <div key={i} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm flex items-start gap-3 hover:border-emerald-200 transition-colors">
+                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-2 shrink-0"></div>
+                          <p className="text-[14.5px] font-bold text-slate-800 leading-[1.6] flex-1">
+                            {parseBoldText(content)}
+                          </p>
+                        </div>
+                      );
+                    }
+
+                    // Fallback for paragraph lines - wrap them as subtle cards to avoid look of dense text
                     return (
-                      <div key={i} className="pt-4 group">
-                        <h4 className="text-emerald-950 font-black text-lg mb-2 flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-xl bg-emerald-600 flex items-center justify-center text-white text-[10px] shadow-md group-hover:scale-110 transition-transform">
-                            <i className="fas fa-seedling"></i>
-                          </div>
-                          {trimmedLine.replace(/^###\s*\d*\.?\s*/, '').trim()}
-                        </h4>
-                        <div className="h-1 w-12 bg-emerald-500/20 rounded-full" />
+                      <div key={i} className="px-6 py-4 bg-white/40 rounded-2xl border border-emerald-100/30 text-slate-700 font-medium leading-relaxed">
+                        {parseBoldText(trimmedLine)}
                       </div>
                     );
-                  }
-
-                  // Premium Bullet Cards
-                  if (trimmedLine.startsWith('•') || trimmedLine.startsWith('-') || /^\d+\./.test(trimmedLine)) {
-                    const content = trimmedLine.replace(/^[•\-\d+\.]\s*/, '').trim();
-                    return (
-                      <div key={i} className="bg-white p-5 rounded-[24px] border border-slate-100 shadow-sm">
-                        <p className="text-[14.5px] font-bold text-slate-800 leading-[1.6]">
-                          {parseBoldText(content)}
-                        </p>
-                      </div>
-                    );
-                  }
-
-                  return (
-                    <div key={i} className="bg-emerald-50/50 p-6 rounded-3xl border border-emerald-100/50 italic text-slate-600 font-medium">
-                      {parseBoldText(trimmedLine)}
-                    </div>
-                  );
-                })}
+                  })}
               </div>
             </div>
 

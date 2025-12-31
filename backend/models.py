@@ -6,10 +6,15 @@ import json
 import os
 
 # Database setup
-# Using a consistent path in the backend directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATABASE_URL = os.environ.get('DATABASE_URL', f'sqlite:///{os.path.join(BASE_DIR, "smart_agri_advisor.db")}')
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
+# PostgreSQL does not support check_same_thread
+connect_args = {}
+if DATABASE_URL.startswith("sqlite"):
+    connect_args = {"check_same_thread": False}
+
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
