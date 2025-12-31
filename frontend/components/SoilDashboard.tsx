@@ -23,10 +23,10 @@ const SoilDashboard: React.FC<Props> = ({ data }) => {
   };
 
   const metrics = [
-    { label: 'Nitrogen', value: data.N, level: data.N_level, symbol: 'N', icon: 'fa-vial' },
-    { label: 'Phosphorus', value: data.P, level: data.P_level, symbol: 'P', icon: 'fa-flask' },
-    { label: 'Potassium', value: data.K, level: data.K_level, symbol: 'K', icon: 'fa-atom' },
-    { label: 'pH Balance', value: data.ph?.toFixed(1), level: data.pH_level, symbol: 'pH', icon: 'fa-droplet' },
+    { label: 'Nitrogen', value: data.nitrogen || data.N, level: data.N_level, symbol: 'N', icon: 'fa-vial' },
+    { label: 'Phosphorus', value: data.phosphorus || data.P, level: data.P_level, symbol: 'P', icon: 'fa-flask' },
+    { label: 'Potassium', value: data.potassium || data.K, level: data.K_level, symbol: 'K', icon: 'fa-atom' },
+    { label: 'pH Balance', value: (data.ph || data.pH)?.toFixed?.(1) || data.ph || data.pH, level: data.pH_level, symbol: 'pH', icon: 'fa-droplet' },
   ];
 
   return (
