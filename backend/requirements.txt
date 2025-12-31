@@ -1,27 +1,24 @@
 # Smart Agri Advisor - Backend Dependencies
-# Python 3.10+
+# Python 3.10+ required
 
 # Web Framework
-fastapi==0.115.0
-uvicorn==0.30.0
+fastapi==0.127.0
+uvicorn==0.34.0
 
 # Database
-sqlalchemy==2.0.35
+sqlalchemy==2.0.36
 
 # Environment Variables
 python-dotenv==1.0.1
 
-# Google Gemini AI
-google-genai==1.3.0
+# Google Gemini AI (NEW SDK - replaces deprecated google-generativeai)
+google-genai==1.56.0
 
 # HTTP Requests (for Serper API & Geocoding)
-requests==2.32.0
+requests==2.32.3
 
 # Date Utilities
-python-dateutil==2.9.0
+python-dateutil==2.9.0.post0
 
 # Data Validation
-pydantic==2.9.0
-
-# CORS Middleware (included in FastAPI)
-# starlette (auto-installed with FastAPI)
+pydantic==2.10.4
