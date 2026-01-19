@@ -14,7 +14,7 @@ npm install
 npm run dev
 ```
 
-App runs at: `http://localhost:3000`
+App runs at: `http://localhost:5173`
 
 ---
 
@@ -70,7 +70,7 @@ frontend/
 ### `App.tsx` - Main Application
 - State management for user, analysis, history
 - Tab navigation (Dashboard, Chat, Reports, Knowledge, Docs)
-- Map integration with Leaflet
+- Interactive location selection for India
 - Coordinates India boundary for geo-fencing
 
 ### `LoginPage.tsx` - Authentication
@@ -142,7 +142,7 @@ const [chatMessages, setChatMessages] = useState<Message[]>([]);
 ### Base URL
 ```typescript
 // services/apiConfig.ts
-export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'http://localhost:8000/api';
 ```
 
 ### Key Service Functions
