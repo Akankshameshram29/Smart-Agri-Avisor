@@ -21,7 +21,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Server runs at: `http://localhost:5000`
+Server runs at: `http://localhost:8000`
 
 ---
 
@@ -55,16 +55,16 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 
 ```
 backend/
-├── app.py              # FastAPI application & routes
-├── models.py           # SQLAlchemy database models
-├── config.py           # Configuration settings
-├── requirements.txt    # Python dependencies
-├── .env                # Environment variables (not in git)
-├── .env.example        # Example env file
+├── app.py                  # FastAPI application & routes (327 lines)
+├── models.py               # SQLAlchemy database models
+├── requirements.txt        # Python dependencies
+├── smart_agri_advisor.db   # SQLite database file
+├── .env                    # Environment variables (not in git)
 └── services/
-    ├── agent_service.py    # Analysis orchestration
-    ├── gemini_service.py   # Gemini AI integration
-    └── db_service.py       # Database operations
+    ├── __init__.py         # Package init
+    ├── agent_service.py    # Analysis orchestration (Location, Soil, Recommendation)
+    ├── gemini_service.py   # Gemini AI integration (Mandi Agent)
+    └── db_service.py       # Database operations (Memory Agent)
 ```
 
 ---
@@ -164,14 +164,14 @@ The AI chatbot receives full user context including:
 ## 🛠️ Dependencies
 
 ```
-fastapi==0.115.0
-uvicorn==0.30.0
-sqlalchemy==2.0.35
+fastapi==0.127.0
+uvicorn==0.34.0
+sqlalchemy==2.0.36
 python-dotenv==1.0.1
-google-genai==1.3.0
-requests==2.32.0
-python-dateutil==2.9.0
-pydantic==2.9.0
+google-genai==1.56.0
+requests==2.32.3
+python-dateutil==2.9.0.post0
+pydantic==2.10.4
 ```
 
 ---
