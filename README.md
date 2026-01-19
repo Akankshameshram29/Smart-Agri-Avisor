@@ -1,11 +1,12 @@
 # 🌾 Smart Agri Advisor
 ### **AI-Powered Crop Intelligence for Indian Farmers**
 
-[![Framework - React 19](https://img.shields.io/badge/Frontend-React_19-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
-[![Backend - FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
-[![AI Core - Gemini 2.5](https://img.shields.io/badge/AI_Core-Gemini_2.5_Flash-4285F4?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
+[![Framework - React 19](https://img.shields.io/badge/Frontend-React_19.2-61DAFB?style=for-the-badge&logo=react)](https://react.dev/)
+[![Backend - FastAPI](https://img.shields.io/badge/Backend-FastAPI_0.127-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![AI Core - Gemini](https://img.shields.io/badge/AI_Core-Gemini_2.5_|_3_Flash-4285F4?style=for-the-badge&logo=google)](https://deepmind.google/technologies/gemini/)
 [![Database - SQLite](https://img.shields.io/badge/Database-SQLite-003B57?style=for-the-badge&logo=sqlite)](https://www.sqlite.org/)
 [![Live Data - Serper](https://img.shields.io/badge/Grounding-Serper_API-FF6B6B?style=for-the-badge)](https://serper.dev/)
+[![Build - Vite 6](https://img.shields.io/badge/Build-Vite_6.2-646CFF?style=for-the-badge&logo=vite)](https://vitejs.dev/)
 
 ---
 
@@ -38,18 +39,20 @@
 ## 🛠️ Technology Stack
 
 ### Backend
-- **FastAPI** - High-performance Python web framework
-- **SQLAlchemy** - ORM for SQLite database
-- **Google Gemini 2.5 Flash** - AI model for recommendations
+- **FastAPI 0.127.0** - High-performance Python web framework
+- **SQLAlchemy 2.0.36** - ORM for SQLite database
+- **Google Gemini 2.5 Flash & Gemini 3 Flash** - AI models for recommendations (google-genai 1.56.0)
 - **Serper API** - Live web search for price grounding
 - **OpenStreetMap Nominatim** - Free reverse geocoding
+- **Pydantic 2.10.4** - Data validation
 
 ### Frontend
-- **React 19** - Modern UI framework
-- **Vite** - Lightning-fast build tool
-- **Recharts** - Beautiful area charts for price visualization
-- **Leaflet** - Interactive India map
-- **TailwindCSS** - Utility-first styling
+- **React 19.2.3** - Modern UI framework
+- **TypeScript 5.8.2** - Type-safe JavaScript
+- **Vite 6.2.0** - Lightning-fast build tool
+- **Leaflet 1.9.4** - Interactive India map (loaded via CDN)
+- **Recharts 3.6.0** - Beautiful area charts for price visualization
+- **Custom CSS** - Glassmorphism styling with gradients
 
 ---
 
@@ -83,7 +86,7 @@ Start the server:
 ```bash
 python app.py
 ```
-Server runs at: `http://localhost:5000`
+Server runs at: `http://localhost:8000`
 
 ### 3. Frontend Setup
 ```bash
@@ -91,7 +94,7 @@ cd frontend
 npm install
 npm run dev
 ```
-App runs at: `http://localhost:3000`
+App runs at: `http://localhost:5173`
 
 ---
 
@@ -100,28 +103,42 @@ App runs at: `http://localhost:3000`
 ```
 Smart-Agri-Avisor/
 ├── backend/
-│   ├── app.py              # FastAPI routes
-│   ├── models.py           # Database schema
-│   ├── services/
-│   │   ├── agent_service.py    # Analysis orchestration
-│   │   ├── gemini_service.py   # AI integration
-│   │   └── db_service.py       # Database operations
-│   └── requirements.txt
+│   ├── app.py                  # FastAPI routes (327 lines)
+│   ├── models.py               # SQLAlchemy database models
+│   ├── requirements.txt        # Python dependencies
+│   ├── smart_agri_advisor.db   # SQLite database
+│   └── services/
+│       ├── agent_service.py    # Location, Soil, Recommendation agents
+│       ├── gemini_service.py   # AI + Mandi Agent (web search)
+│       └── db_service.py       # Memory Agent (database ops)
 │
 ├── frontend/
-│   ├── App.tsx             # Main application
+│   ├── App.tsx                 # Main application (30KB)
+│   ├── types.ts                # TypeScript interfaces
+│   ├── index.html              # Entry HTML
+│   ├── vite.config.ts          # Vite configuration
 │   ├── components/
-│   │   ├── LoginPage.tsx       # Authentication
-│   │   ├── CropCard.tsx        # Recommendation cards
+│   │   ├── LoginPage.tsx       # Phone authentication
+│   │   ├── CropCard.tsx        # Crop recommendation cards
 │   │   ├── CropDetails.tsx     # Detailed analysis modal
-│   │   ├── AgriChat.tsx        # AI chatbot
-│   │   └── ...
+│   │   ├── AgriChat.tsx        # AI chatbot interface
+│   │   ├── Header.tsx          # Application header
+│   │   ├── SoilDashboard.tsx   # NPK & pH display
+│   │   ├── Resources.tsx       # Agricultural resources
+│   │   ├── Marketplace.tsx     # Product marketplace
+│   │   ├── DatabaseManager.tsx # Database management
+│   │   ├── MapInstructions.tsx # Map usage guide
+│   │   └── SkeletonLoaders.tsx # Loading animations
 │   └── services/
-│       ├── agentService.ts     # Analysis API
-│       ├── geminiService.ts    # AI API
-│       └── dbService.ts        # Database API
+│       ├── agentService.ts     # Crop analysis API
+│       ├── geminiService.ts    # AI & details API
+│       ├── dbService.ts        # Auth & history API
+│       └── apiConfig.ts        # API configuration
 │
-├── PROJECT_DOCUMENTATION.html  # Interactive docs
+├── aadya.md                    # Detailed presentation guide
+├── DEVELOPER_GUIDE.md          # Developer documentation
+├── PROJECT_DOCUMENTATION.html  # Interactive HTML docs
+├── LICENSE                     # MIT License
 └── README.md
 ```
 

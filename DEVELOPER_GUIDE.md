@@ -13,11 +13,12 @@ This document provides a comprehensive, deep-dive analysis of the **Smart Agri A
 ## 2. Advanced Technology Stack
 | Layer | Technologies | Role in Project |
 | :--- | :--- | :--- |
-| **Frontend** | React 18, TypeScript | Type-safe, high-performance UI components with lifted-state persistence. |
-| **Styling** | Custom Glassmorphism | Premium, lightweight design with optimized conversation bubbles ($14.5px$ readability). |
-| **Persistence** | SQLite (SQLAlchemy) | Unified storage for Users, Analysis History, and Persistent Chat (`chat_messages`). |
+| **Frontend** | React 19.2.3, TypeScript 5.8.2, Vite 6.2.0 | Type-safe, high-performance UI with lifted-state persistence. |
+| **Charts** | Recharts 3.6.0 | Beautiful, responsive price charts and data visualization. |
+| **Styling** | Custom Glassmorphism CSS | Premium, lightweight design with optimized conversation bubbles. |
+| **Persistence** | SQLite (SQLAlchemy 2.0.36) | Unified storage for Users, Analysis History, and Persistent Chat. |
 | **Resilience** | Gemini Key Rotator | Automated failover between multiple Gemini API keys to avoid quota limits. |
-| **AI Neural Core**| Google Gemini 2.5 Flash | High-speed reasoning with **Script-Locking Enforcement**. |
+| **AI Neural Core**| Google Gemini 2.5 Flash & Gemini 3 Flash (google-genai 1.56.0) | High-speed reasoning with **Script-Locking Enforcement**. |
 | **Grounding** | Serper API + Context | Live Mandi verification with **Hinglish** style-matching. |
 
 ---
@@ -73,6 +74,6 @@ Unlike standard chatbots that lose memory on a page refresh:
 - **Voice-First Interaction**: Allowing farmers to use voice commands in regional languages via Gemini's multi-modal capabilities.
 
 ---
-**Smart Agri Market Documentation**  
-*Developer: Project Lead*  
-*Date: December 28, 2025*
+**Smart Agri Advisor Documentation**  
+*Developer: Aadya Madankar*  
+*Last Updated: January 19, 2026*

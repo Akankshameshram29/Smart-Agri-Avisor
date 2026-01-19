@@ -14,7 +14,7 @@ npm install
 npm run dev
 ```
 
-App runs at: `http://localhost:3000`
+App runs at: `http://localhost:5173`
 
 ---
 
@@ -70,7 +70,7 @@ frontend/
 ### `App.tsx` - Main Application
 - State management for user, analysis, history
 - Tab navigation (Dashboard, Chat, Reports, Knowledge, Docs)
-- Map integration with Leaflet
+- Interactive map using Leaflet (loaded via CDN in index.html)
 - Coordinates India boundary for geo-fencing
 
 ### `LoginPage.tsx` - Authentication
@@ -142,7 +142,7 @@ const [chatMessages, setChatMessages] = useState<Message[]>([]);
 ### Base URL
 ```typescript
 // services/apiConfig.ts
-export const API_BASE_URL = 'http://localhost:5000/api';
+export const API_BASE_URL = 'http://localhost:8000/api';
 ```
 
 ### Key Service Functions
@@ -177,6 +177,11 @@ updateUserName(phone, name) → User
   "@google/genai": "^1.34.0",
   "@clerk/clerk-react": "^5.59.2"
 }
+```
+
+### CDN Dependencies (loaded in index.html)
+```
+Leaflet 1.9.4 - Interactive map for India location selection
 ```
 
 ### Dev Dependencies
