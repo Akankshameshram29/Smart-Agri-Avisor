@@ -63,7 +63,6 @@ USER TAPS ON MAP
 | Feature | Description |
 |---------|-------------|
 | **Live Grounding** | Every Mandi price is verified via Serper web search - no hallucination |
-| **Zero Downtime** | Automatic API key rotation (3 keys) ensures 100% uptime |
 | **Personalized AI** | Chatbot knows user name, past searches, and current screen context |
 | **District Accuracy** | OpenStreetMap reverse geocoding for precise location detection |
 | **Dynamic Dates** | Price charts show exact dates (today's date, not generic months) |
@@ -121,20 +120,11 @@ pip install -r requirements.txt
 
 Create `.env` file in `backend/` directory:
 ```env
-# Gemini API Keys (comma-separated for rotation)
-GEMINI_KEYS=your_key_1,your_key_2,your_key_3
+# Gemini API Key
+API_KEY=your_gemini_api_key
 
-# Primary API Key (fallback)
-API_KEY=your_primary_key
-
-# Serper API for web grounding
+# Serper API for web grounding (live Mandi prices)
 SERPER_API_KEY=your_serper_key
-
-# JWT Secret for sessions
-SECRET_KEY=your_secret_key
-
-# Database URL (empty = SQLite)
-DATABASE_URL=
 ```
 
 Start the server:
@@ -258,7 +248,6 @@ Additional resources:
 | Static/outdated prices | Live Mandi grounding via web search |
 | Generic recommendations | Location + soil-specific AI analysis |
 | Session-based memory | Persistent neural memory (SQLite) |
-| Single API key | Automatic key rotation (3 keys) |
 | Basic UI | Premium glassmorphic design |
 | Single AI call | 5 collaborative agents |
 
@@ -266,7 +255,6 @@ Additional resources:
 
 ## 🔒 Security Features
 
-- **API Key Rotation**: 3 Gemini keys auto-switch on quota exhaustion
 - **Fallback Crops**: Pre-defined recommendations if AI fails
 - **JSON Repair**: Auto-fix malformed AI responses
 - **Session Management**: Secure phone-based authentication

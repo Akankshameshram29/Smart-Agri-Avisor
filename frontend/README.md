@@ -27,22 +27,6 @@ App runs at: `http://localhost:5173`
 
 ---
 
-## ⚙️ Environment Variables
-
-Create a `.env.local` file in the `frontend/` directory (optional):
-
-```env
-# Gemini API Key (for direct client-side calls if needed)
-VITE_GEMINI_API_KEY=your_gemini_key
-
-# Backend API URL (default: http://localhost:8000)
-VITE_API_URL=http://localhost:8000
-```
-
-> **Note**: Most API calls go through the backend. Direct Gemini access is optional.
-
----
-
 ## 📁 Project Structure
 
 ```

@@ -40,23 +40,11 @@ API Documentation: `http://localhost:8000/docs`
 Create a `.env` file in the `backend/` directory:
 
 ```env
-# Gemini API Keys (comma-separated for rotation)
-GEMINI_KEYS=key1,key2,key3
+# Gemini API Key
+API_KEY=your_gemini_api_key
 
-# Primary API Key (fallback)
-API_KEY=your_gemini_key
-
-# Serper API for web grounding
+# Serper API for web grounding (live Mandi prices)
 SERPER_API_KEY=your_serper_key
-
-# JWT Secret for sessions
-SECRET_KEY=your_secret_key
-
-# Database URL (empty = SQLite)
-DATABASE_URL=
-
-# CORS Origins (comma-separated)
-CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 
 ---
@@ -175,23 +163,16 @@ backend/
 
 ## 🔄 Key Features
 
-### 1. API Key Rotation
-```python
-# Automatically rotates through multiple Gemini keys
-GEMINI_KEYS=key1,key2,key3
-```
-If one key exhausts quota, the system switches to the next automatically.
-
-### 2. Live Web Grounding
+### 1. Live Web Grounding
 Uses **Serper API** to search for real-time Mandi prices before generating recommendations. Example queries:
 - "Tomato Mandi price Pune today"
 - "AgMarknet onion rate Maharashtra"
 - "e-NAM wheat price January 2026"
 
-### 3. Reverse Geocoding
+### 2. Reverse Geocoding
 Uses **OpenStreetMap Nominatim** (free, no API key) to convert GPS coordinates to district names.
 
-### 4. Neural Memory
+### 3. Neural Memory
 The AI chatbot receives full user context including:
 - User name and phone
 - Past 5 search records
