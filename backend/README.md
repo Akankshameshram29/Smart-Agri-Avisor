@@ -1,6 +1,15 @@
 # 🔧 Smart Agri Advisor - Backend
 
-**FastAPI-powered API server for agricultural intelligence**
+<div align="center">
+
+**FastAPI-powered Agentic AI API Server for Agricultural Intelligence**
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.127.0-009688?style=flat-square&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python)](https://python.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-Database-003B57?style=flat-square&logo=sqlite)](https://sqlite.org/)
+[![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square&logo=google)](https://deepmind.google/technologies/gemini/)
+
+</div>
 
 ---
 
@@ -21,7 +30,8 @@ pip install -r requirements.txt
 python app.py
 ```
 
-Server runs at: `http://localhost:8000`
+Server runs at: `http://localhost:8000`  
+API Documentation: `http://localhost:8000/docs`
 
 ---
 
@@ -45,8 +55,33 @@ SECRET_KEY=your_secret_key
 # Database URL (empty = SQLite)
 DATABASE_URL=
 
-# CORS Origins
+# CORS Origins (comma-separated)
 CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+```
+
+---
+
+## 🤖 Agent Architecture
+
+The backend implements **5 specialized AI agents** that collaborate:
+
+| Agent | File | Function | Role |
+|-------|------|----------|------|
+| 🗺️ **Location** | `agent_service.py` | `_get_location_info()` | GPS → District name |
+| 🌱 **Soil** | `agent_service.py` | `_get_soil_data()` | NPK, pH analysis |
+| 💰 **Mandi** | `gemini_service.py` | `_search_web()` | Live price search |
+| 🧠 **Recommendation** | `agent_service.py` | `_generate_recommendations()` | AI crop suggestions |
+| 💾 **Memory** | `db_service.py` | All functions | Persistent storage |
+
+### Agent Flow
+```
+Request → Location Agent → Soil Agent → Memory Agent
+                              ↓
+                         Mandi Agent (web search)
+                              ↓
+                      Recommendation Agent (Gemini AI)
+                              ↓
+                      Memory Agent (save) → Response
 ```
 
 ---
@@ -55,54 +90,54 @@ CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 
 ```
 backend/
-├── app.py                  # FastAPI application & routes (327 lines)
-├── models.py               # SQLAlchemy database models
+├── app.py                  # FastAPI application & routes
+├── models.py               # SQLAlchemy database models (ORM)
 ├── requirements.txt        # Python dependencies
-├── smart_agri_advisor.db   # SQLite database file
+├── smart_agri_advisor.db   # SQLite database file (auto-created)
 ├── .env                    # Environment variables (not in git)
 └── services/
-    ├── __init__.py         # Package init
-    ├── agent_service.py    # Analysis orchestration (Location, Soil, Recommendation)
-    ├── gemini_service.py   # Gemini AI integration (Mandi Agent)
-    └── db_service.py       # Database operations (Memory Agent)
+    ├── __init__.py         # Package initializer
+    ├── agent_service.py    # Location, Soil, Recommendation agents
+    ├── gemini_service.py   # Gemini AI + Mandi Agent (web search)
+    └── db_service.py       # Memory Agent (database operations)
 ```
 
 ---
 
 ## 🔌 API Endpoints
 
-### Authentication
+### 🔐 Authentication
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/auth/login` | Login or register user |
-| POST | `/api/auth/logout` | Logout user |
-| POST | `/api/auth/update-name` | Update display name |
+| `POST` | `/api/auth/login` | Login or register user |
+| `POST` | `/api/auth/logout` | Logout user |
+| `POST` | `/api/auth/update-name` | Update display name |
 
-### Analysis
+### 🌾 Analysis
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/analysis/run` | Run full crop analysis |
-| POST | `/api/crops/details` | Get detailed crop insights |
+| `POST` | `/api/analysis/run` | Run full crop analysis |
+| `POST` | `/api/crops/details` | Get detailed crop insights with charts |
 
-### History
+### 📊 History
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/history` | Get user's saved reports |
-| DELETE | `/api/history/{id}` | Delete a report |
-| GET | `/api/stats` | Get user statistics |
+| `GET` | `/api/history` | Get user's saved reports |
+| `DELETE` | `/api/history/{id}` | Delete a report |
+| `GET` | `/api/stats` | Get user statistics |
 
-### Chat
+### 💬 Chat
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| POST | `/api/chat/ask` | Ask AI a question |
-| GET | `/api/chat/history` | Get chat history |
+| `POST` | `/api/chat/ask` | Ask AI a question |
+| `GET` | `/api/chat/history` | Get chat history |
 
-### Resources
+### 📚 Resources
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/resources` | Search knowledge articles |
-| GET | `/api/schemes` | Get government schemes |
-| GET | `/api/marketplace` | Search agri products |
+| `GET` | `/api/resources` | Search knowledge articles |
+| `GET` | `/api/schemes` | Get government schemes |
+| `GET` | `/api/marketplace` | Search agri products |
 
 ---
 
@@ -111,30 +146,30 @@ backend/
 ### Users Table
 | Column | Type | Description |
 |--------|------|-------------|
-| id | Integer | Primary key |
-| phone | String(15) | Unique phone number |
-| name | String(100) | Display name |
-| joined_at | DateTime | Registration date |
+| `id` | Integer | Primary key (auto-increment) |
+| `phone` | String(15) | Unique phone number |
+| `name` | String(100) | Display name |
+| `joined_at` | DateTime | Registration timestamp |
 
 ### FarmerRecords Table
 | Column | Type | Description |
 |--------|------|-------------|
-| id | String(20) | Record ID (REC-XXXXXXXX) |
-| user_id | Integer | Foreign key to users |
-| lat | Float | Latitude |
-| lng | Float | Longitude |
-| district | String(100) | District name |
-| timestamp | DateTime | Created date |
-| data | Text | Full analysis JSON |
+| `id` | String(20) | Record ID (REC-XXXXXXXX) |
+| `user_id` | Integer | Foreign key → users |
+| `lat` | Float | Latitude coordinate |
+| `lng` | Float | Longitude coordinate |
+| `district` | String(100) | District name |
+| `timestamp` | DateTime | Created timestamp |
+| `data` | Text | Full analysis JSON |
 
 ### ChatMessages Table
 | Column | Type | Description |
 |--------|------|-------------|
-| id | Integer | Primary key |
-| user_id | Integer | Foreign key to users |
-| role | String(20) | 'user' or 'assistant' |
-| content | Text | Message content |
-| timestamp | DateTime | Message time |
+| `id` | Integer | Primary key (auto-increment) |
+| `user_id` | Integer | Foreign key → users |
+| `role` | String(20) | 'user' or 'assistant' |
+| `content` | Text | Message content |
+| `timestamp` | DateTime | Message timestamp |
 
 ---
 
@@ -148,22 +183,31 @@ GEMINI_KEYS=key1,key2,key3
 If one key exhausts quota, the system switches to the next automatically.
 
 ### 2. Live Web Grounding
-Uses Serper API to search for real-time Mandi prices before generating recommendations.
+Uses **Serper API** to search for real-time Mandi prices before generating recommendations. Example queries:
+- "Tomato Mandi price Pune today"
+- "AgMarknet onion rate Maharashtra"
+- "e-NAM wheat price January 2026"
 
 ### 3. Reverse Geocoding
-Uses OpenStreetMap Nominatim (free, no API key) to convert GPS coordinates to district names.
+Uses **OpenStreetMap Nominatim** (free, no API key) to convert GPS coordinates to district names.
 
 ### 4. Neural Memory
 The AI chatbot receives full user context including:
 - User name and phone
 - Past 5 search records
 - Current screen context (active tab, current report)
+- Chat history
+
+### 5. Error Recovery
+- **Fallback Crops**: Pre-defined recommendations if AI fails
+- **JSON Repair**: Auto-fix malformed AI responses
+- **Retry Logic**: Automatic retries on transient failures
 
 ---
 
 ## 🛠️ Dependencies
 
-```
+```txt
 fastapi==0.127.0
 uvicorn==0.34.0
 sqlalchemy==2.0.36
@@ -174,9 +218,56 @@ python-dateutil==2.9.0.post0
 pydantic==2.10.4
 ```
 
+Install all dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🧪 Development
+
+### Run in Development Mode
+```bash
+python app.py
+# or with uvicorn directly
+uvicorn app:app --reload --host 0.0.0.0 --port 8000
+```
+
+### View API Documentation
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+
+### Test Endpoints
+```bash
+# Health check
+curl http://localhost:8000/
+
+# Login
+curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"phone": "9876543210", "name": "Test User"}'
+```
+
+---
+
+## 📦 External APIs Used
+
+| API | Purpose | Auth Required |
+|-----|---------|---------------|
+| **Google Gemini** | AI recommendations | API Key (via SDK) |
+| **Serper** | Web search for prices | API Key (via HTTP) |
+| **OpenStreetMap** | Reverse geocoding | No (FREE!) |
+
 ---
 
 ## 📞 Support
 
 **Developer**: Aadya Madankar  
 **GitHub**: https://github.com/Aadya-Madankar/Smart-Agri-Avisor
+
+---
+
+<div align="center">
+  <p>Part of <b>Smart Agri Advisor</b> - Agentic AI for Indian Agriculture</p>
+</div>
