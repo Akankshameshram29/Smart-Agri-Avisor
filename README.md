@@ -120,11 +120,16 @@ pip install -r requirements.txt
 
 Create `.env` file in `backend/` directory:
 ```env
-# Gemini API Key
-API_KEY=your_gemini_api_key
+# Gemini API Keys (comma-separated, or just one)
+GEMINI_KEYS=your_gemini_key
+# OR use single key:
+# API_KEY=your_gemini_key
 
 # Serper API for web grounding (live Mandi prices)
 SERPER_API_KEY=your_serper_key
+
+# Database URL (optional - leave empty for SQLite)
+# DATABASE_URL=postgresql://user:pass@localhost/dbname
 ```
 
 Start the server:
