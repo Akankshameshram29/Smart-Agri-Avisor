@@ -47,6 +47,7 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
               )}
             </div>
           ))}
+          {/*
           <div className="relative">
             <a
               href="/docs.html"
@@ -58,6 +59,7 @@ const Header: React.FC<Props> = ({ activeTab, onTabChange, onOpenProfile, user }
               Docs
             </a>
           </div>
+          */}
         </nav>
 
         {/* User Account Section */}
