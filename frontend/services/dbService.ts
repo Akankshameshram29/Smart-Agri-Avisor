@@ -7,7 +7,7 @@ class DatabaseService {
    * Login or register user in the backend
    */
   async login(phone: string, name: string): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ class DatabaseService {
     if (!phone) return [];
 
     try {
-      const response = await fetch(`${API_BASE_URL}/history?phone=${encodeURIComponent(phone)}`);
+      const response = await fetch(`${API_BASE_URL}/api/history?phone=${encodeURIComponent(phone)}`);
       if (!response.ok) return [];
       return await response.json();
     } catch {
@@ -68,7 +68,7 @@ class DatabaseService {
     if (!phone) return 0;
 
     try {
-      const response = await fetch(`${API_BASE_URL}/stats?phone=${encodeURIComponent(phone)}`);
+      const response = await fetch(`${API_BASE_URL}/api/stats?phone=${encodeURIComponent(phone)}`);
       if (!response.ok) return 0;
       const data = await response.json();
       return data.trainingCount || 0;
@@ -82,7 +82,7 @@ class DatabaseService {
    */
   async deleteRecord(phone: string, id: string): Promise<void> {
     try {
-      await fetch(`${API_BASE_URL}/history/${id}?phone=${encodeURIComponent(phone)}`, {
+      await fetch(`${API_BASE_URL}/api/history/${id}?phone=${encodeURIComponent(phone)}`, {
         method: 'DELETE'
       });
     } catch {
@@ -94,7 +94,7 @@ class DatabaseService {
    * Update user's display name
    */
   async updateUserName(phone: string, name: string): Promise<any> {
-    const response = await fetch(`${API_BASE_URL}/auth/update-name`, {
+    const response = await fetch(`${API_BASE_URL}/api/auth/update-name`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
