@@ -178,26 +178,6 @@ def get_crop_details(request: CropDetailsRequest, db: Session = Depends(get_db))
         raise HTTPException(status_code=500, detail="Failed to get crop details")
 
 
-# ==================== HISTORY ROUTES ====================
-
-@app.get("/api/history")
-def get_history(phone: str = Query(...), db: Session = Depends(get_db)):
-    """Get user's analysis history."""
-    if not phone:
-        raise HTTPException(status_code=400, detail="Phone number required")
-    
-    return db_service.get_history(db, phone)
-
-
-@app.delete("/api/history/{record_id}")
-def delete_record(record_id: str, phone: str = Query(...), db: Session = Depends(get_db)):
-    """Delete a specific history record."""
-    if not phone:
-        raise HTTPException(status_code=400, detail="Phone number required")
-    
-    success = db_service.delete_record(db, phone, record_id)
-    return {"success": success}
-
 
 # ==================== STATS ROUTES ====================
 
