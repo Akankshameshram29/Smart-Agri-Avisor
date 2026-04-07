@@ -4,7 +4,7 @@ import { API_BASE_URL } from "./apiConfig";
 
 export const geminiService = {
   async getCropDetails(cropName: string, location: LocationInfo, soil: SoilData, phone?: string, analysisId?: string): Promise<CropDetail> {
-    const response = await fetch(`${API_BASE_URL}/crops/details`, {
+    const response = await fetch(`${API_BASE_URL}/api/crops/details`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const geminiService = {
   async searchMarketplace(query: string, category: string): Promise<MarketItem[]> {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/marketplace?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
+        `${API_BASE_URL}/api/marketplace?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
       );
 
       if (!response.ok) return [];
@@ -41,7 +41,7 @@ export const geminiService = {
   async searchResources(query: string, category: string): Promise<ResourceArticle[]> {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/resources?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
+        `${API_BASE_URL}/api/resources?query=${encodeURIComponent(query)}&category=${encodeURIComponent(category)}`
       );
 
       if (!response.ok) return [];
@@ -53,7 +53,7 @@ export const geminiService = {
 
   async getSchemes(): Promise<ResourceArticle[]> {
     try {
-      const response = await fetch(`${API_BASE_URL}/schemes`);
+      const response = await fetch(`${API_BASE_URL}/api/schemes`);
       if (!response.ok) return [];
       return await response.json();
     } catch {
@@ -62,7 +62,7 @@ export const geminiService = {
   },
 
   async askQuestion(phone: string, question: string, context?: any, history?: { role: string, content: string }[]): Promise<string> {
-    const response = await fetch(`${API_BASE_URL}/chat/ask`, {
+    const response = await fetch(`${API_BASE_URL}/api/chat/ask`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export const geminiService = {
   },
 
   async getChatHistory(phone: string): Promise<{ role: 'user' | 'assistant', content: string }[]> {
-    const response = await fetch(`${API_BASE_URL}/chat/history?phone=${encodeURIComponent(phone)}`);
+    const response = await fetch(`${API_BASE_URL}/api/chat/history?phone=${encodeURIComponent(phone)}`);
     if (!response.ok) return [];
     return await response.json();
   }
