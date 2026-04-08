@@ -16,7 +16,7 @@ export const agentService = {
     try {
       onProgress("Resolving precise farm location...");
 
-      const response = await fetch(`${API_BASE_URL}/analysis/run`, {
+      const response = await fetch(`${API_BASE_URL}/api/analysis/run`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
